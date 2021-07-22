@@ -223,6 +223,7 @@ class Player {
         this.playerTicketCards = [];
         this.trains = 45;
         this.playerPts = 0;
+        this.color = "";
     }
 
     mulligan() {
@@ -235,8 +236,700 @@ class Board {
         this.players = [];
         this.railways = [
             {
-
-            }
+                "cities": ["Kagoshima", "Miayzaki"],
+                "length": 1,
+                "color": "pink",
+            },
+            {
+                "cities": ["Kagoshima", "Nagasaki"],
+                "length": 1,
+                "color": "grey",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Kagoshima", "Oita"],
+                "length": 2,
+                "color": "white",
+            },
+            {
+                "cities": ["Nagasaki", "Fukuoka"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Nagasaki", "Fukuoka"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Miayzaki", "Kochi"],
+                "length": 4,
+                "color": "blue",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Miayzaki", "Oita"],
+                "length": 2,
+                "color": "orange",
+            },
+            {
+                "cities": ["Fukuoka", "Oita"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Fukuoka", "Yamaguchi"],
+                "length": 1,
+                "color": "grey",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Fukuoka", "Matsue"],
+                "length": 6,
+                "color": "black",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Oita", "Matsuyama"],
+                "length": 1,
+                "color": "grey",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Fukuoka", "Taipei"],
+                "length": 5,
+                "color": "red",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Taipei", "Shanghai"],
+                "length": 4,
+                "color": "green",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Taipei", "Dalian"],
+                "length": 6,
+                "color": "white",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Kochi", "Matsuyama"],
+                "length": 3,
+                "color": "white",
+            },
+            {
+                "cities": ["Kochi", "Wakayama"],
+                "length": 3,
+                "color": "grey",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Kochi", "Takamatsu"],
+                "length": 3,
+                "color": "black",
+            },
+            {
+                "cities": ["Matsuyama", "Takamatsu"],
+                "length": 2,
+                "color": "red",
+            },
+            {
+                "cities": ["Matsuyama", "Hiroshima"],
+                "length": 1,
+                "color": "grey",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Yamaguchi", "Matsue"],
+                "length": 4,
+                "color": "yellow",
+            },
+            {
+                "cities": ["Yamaguchi", "Hiroshima"],
+                "length": 1,
+                "color": "green",
+            },
+            {
+                "cities": ["Yamaguchi", "Hiroshima"],
+                "length": 1,
+                "color": "blue",
+            },
+            {
+                "cities": ["Shanghai", "Dalian"],
+                "length": 5,
+                "color": "orange",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Shanghai", "Qingdao"],
+                "length": 3,
+                "color": "grey",
+            },
+            {
+                "cities": ["Shanghai", "Matsue"],
+                "length": 5,
+                "color": "pink",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Wakayama", "Takamatsu"],
+                "length": 2,
+                "color": "yellow",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Wakayama", "Osaka"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Wakayama", "Shima"],
+                "length": 3,
+                "color": "green",
+            },
+            {
+                "cities": ["Wakayama", "Shima"],
+                "length": 3,
+                "color": "green",
+            },
+            {
+                "cities": ["Takamatsu", "Okayama"],
+                "length": 1,
+                "color": "grey",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Hiroshima", "Matsue"],
+                "length": 2,
+                "color": "orange",
+            },
+            {
+                "cities": ["Hiroshima", "Okayama"],
+                "length": 2,
+                "color": "red",
+            },
+            {
+                "cities": ["Hiroshima", "Okayama"],
+                "length": 2,
+                "color": "black",
+            },
+            {
+                "cities": ["Okayama", "Osaka"],
+                "length": 2,
+                "color": "pink",
+            },
+            {
+                "cities": ["Okayama", "Osaka"],
+                "length": 2,
+                "color": "green",
+            },
+            {
+                "cities": ["Okayama", "Matsue"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Okayama", "Miyazu"],
+                "length": 3,
+                "color": "white",
+            },
+            {
+                "cities": ["Qingdao", "Seoul"],
+                "length": 3,
+                "color": "grey",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Qingdao", "Dalian"],
+                "length": 3,
+                "color": "grey",
+            },
+            {
+                "cities": ["Qingdao", "Miyazu"],
+                "length": 5,
+                "color": "green",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Dalian", "Seoul"],
+                "length": 4,
+                "color": "blue",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Dalian", "Pyongyang"],
+                "length": 5,
+                "color": "grey",
+            },
+            {
+                "cities": ["Shima", "Tokyo"],
+                "length": 6,
+                "color": "yellow",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Shima", "Nagoya"],
+                "length": 1,
+                "color": "white",
+            },
+            {
+                "cities": ["Shima", "Osaka"],
+                "length": 2,
+                "color": "blue",
+            },
+            {
+                "cities": ["Osaka", "Kyoto"],
+                "length": 1,
+                "color": "orange",
+            },
+            {
+                "cities": ["Osaka", "Kyoto"],
+                "length": 1,
+                "color": "yellow",
+            },
+            {
+                "cities": ["Miyazu", "Seoul"],
+                "length": 5,
+                "color": "red",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Miyazu", "Fukui"],
+                "length": 1,
+                "color": "grey",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Miyazu", "Kyoto"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Seoul", "Pyongyang"],
+                "length": 4,
+                "color": "yellow",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Seoul", "Busan"],
+                "length": 3,
+                "color": "grey",
+            },
+            {
+                "cities": ["Nagoya", "Kyoto"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Nagoya", "Kyoto"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Nagoya", "Fuji"],
+                "length": 3,
+                "color": "black",
+            },
+            {
+                "cities": ["Nagoya", "Fuji"],
+                "length": 3,
+                "color": "pink",
+            },
+            {
+                "cities": ["Nagoya", "Takasaki"],
+                "length": 4,
+                "color": "red",
+            },
+            {
+                "cities": ["Kyoto", "Fukui"],
+                "length": 2,
+                "color": "blue",
+            },
+            {
+                "cities": ["Fukui", "Nagano"],
+                "length": 4,
+                "color": "black",
+            },
+            {
+                "cities": ["Fukui", "Suzu"],
+                "length": 4,
+                "color": "white",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Busan", "Suzu"],
+                "length": 4,
+                "color": "grey",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Busan", "Pyongyang"],
+                "length": 3,
+                "color": "white",
+            },
+            {
+                "cities": ["Fuji", "Tokyo"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Fuji", "Tokyo"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Fuji", "Takasaki"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Tokyo", "Mito"],
+                "length": 3,
+                "color": "orange",
+            },
+            {
+                "cities": ["Tokyo", "Oyama"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Tokyo", "Oyama"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Tokyo", "Takasaki"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Takasaki", "Nagano"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Takasaki", "Oyama"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Takasaki", "Koriyama"],
+                "length": 3,
+                "color": "pink",
+            },
+            {
+                "cities": ["Nagano", "Koriyama"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Nagano", "Koriyama"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Nagano", "Niigata"],
+                "length": 3,
+                "color": "grey",
+            },
+            {
+                "cities": ["Nagano", "Suzu"],
+                "length": 3,
+                "color": "blue",
+            },
+            {
+                "cities": ["Suzu", "Pyongyang"],
+                "length": 6,
+                "color": "green",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Suzu", "Niigata"],
+                "length": 3,
+                "color": "grey",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Pyongyang", "Khabarovsk"],
+                "length": 3,
+                "color": "grey",
+            },
+            {
+                "cities": ["Pyongyang", "Vladivostok"],
+                "length": 4,
+                "color": "red",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Pyongyang", "Chongjin"],
+                "length": 2,
+                "color": "pink",
+            },
+            {
+                "cities": ["Mito", "Kaohsiung"],
+                "length": 6,
+                "color": "blue",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Mito", "Sendai"],
+                "length": 5,
+                "color": "pink",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Mito", "Fukushima"],
+                "length": 3,
+                "color": "red",
+            },
+            {
+                "cities": ["Mito", "Oyama"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Oyama", "Fukushima"],
+                "length": 2,
+                "color": "green",
+            },
+            {
+                "cities": ["Oyama", "Fukushima"],
+                "length": 2,
+                "color": "white",
+            },
+            {
+                "cities": ["Koriyama", "Fukushima"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Koriyama", "Fukushima"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Koriyama", "Niigata"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Koriyama", "Niigata"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Fukushima", "Sendai"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Fukushima", "Sendai"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Yamagata", "Sendai"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Yamagata", "Niigata"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Yamagata", "Akita"],
+                "length": 3,
+                "color": "orange",
+            },
+            {
+                "cities": ["Yamagata", "Morioka"],
+                "length": 4,
+                "color": "green",
+            },
+            {
+                "cities": ["Niigata", "Chongjin"],
+                "length": 5,
+                "color": "yellow",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Niigata", "Vladivostok"],
+                "length": 5,
+                "color": "white",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Chongjin", "Vladivostok"],
+                "length": 3,
+                "color": "grey",
+            },
+            {
+                "cities": ["Khabarovsk", "Vladivostok"],
+                "length": 2,
+                "color": "yellow",
+            },
+            {
+                "cities": ["Khabarovsk", "Korsakov"],
+                "length": 3,
+                "color": "black",
+            },
+            {
+                "cities": ["Vladivostok", "Korsakov"],
+                "length": 4,
+                "color": "pink",
+                "lacomotive": 1,
+            },
+            {
+                "cities": ["Korsakov", "Wakkanai"],
+                "length": 4,
+                "color": "grey",
+                "lacomotive": 1,
+            },
+            {
+                "cities": ["Wakkanai", "Asahikawa"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Wakkanai", "Asahikawa"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Wakkanai", "Abashiri"],
+                "length": 3,
+                "color": "green",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Asahikawa", "Sapporo"],
+                "length": 1,
+                "color": "red",
+            },
+            {
+                "cities": ["Asahikawa", "Abashiri"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Asahikawa", "Obihiro"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Sapporo", "Hakodate"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Sapporo", "Hakodate"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Sapporo", "Obihiro"],
+                "length": 1,
+                "color": "black",
+            },
+            {
+                "cities": ["Abashiri", "Obihiro"],
+                "length": 3,
+                "color": "yellow",
+            },
+            {
+                "cities": ["Obihiro", "Hakodate"],
+                "length": 2,
+                "color": "grey",
+                "lacomotive": 1,
+            },
+            {
+                "cities": ["Obihiro", "Hachinohe"],
+                "length": 4,
+                "color": "pink",
+                "lacomotive": 1,
+            },
+            {
+                "cities": ["Hakodate", "Akita"],
+                "length": 5,
+                "color": "blue",
+                "lacomotive": 1,
+            },
+            {
+                "cities": ["Hakodate", "Aomori"],
+                "length": 1,
+                "color": "grey",
+                "lacomotive": 1,
+            },
+            {
+                "cities": ["Hakodate", "Aomori"],
+                "length": 1,
+                "color": "grey",
+                "lacomotive": 1,
+            },
+            {
+                "cities": ["Aomori", "Akita"],
+                "length": 3,
+                "color": "red",
+            },
+            {
+                "cities": ["Aomori", "Hachinohe"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Aomori", "Hachinohe"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Akita", "Morioka"],
+                "length": 2,
+                "color": "black",
+            },
+            {
+                "cities": ["Hachinohe", "Morioka"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Hachinohe", "Morioka"],
+                "length": 1,
+                "color": "grey",
+            },
+            {
+                "cities": ["Hachinohe", "Sendai"],
+                "length": 6,
+                "color": "orange",
+                "locomotive": 1,
+            },
+            {
+                "cities": ["Morioka", "Sendai"],
+                "length": 3,
+                "color": "yellow",
+            },
+            {
+                "cities": ["Morioka", "Sendai"],
+                "length": 3,
+                "color": "blue",
+            },
+            {
+                "cities": ["Kaohsiung", "Taipei"],
+                "length": 3,
+                "color": "grey",
+            },
+            {
+                "cities": ["Kaohsiung", "Shanghai"],
+                "length": 4,
+                "color": "black",
+            },
+            {
+                "cities": ["Taipei", "Busan"],
+                "length": 4,
+                "color": "orange",
+                "locomotive": 1,
+            },
         ];
     }
 
