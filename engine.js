@@ -234,6 +234,7 @@ class Player {
 class Board {
     constructor() {
         this.players = [];
+        this.visibleCards = [];
         this.railways = [
             {
                 "cities": ["Kagoshima", "Miayzaki"],
@@ -946,6 +947,8 @@ class Board {
             this.players[i].playerTrainCards = trains.cards.splice(0, 4);
             this.players[i].playerTicketCards = tickets.cards.splice(0, 5);
         }
+        this.visibleCards = trains.cards.splice(0, 5);
+        console.log(this.visibleCards)
     }
 }
 
@@ -960,6 +963,10 @@ board.start("Me", "Player 2")
 ////////////////////////////////
 const cardWidth = 90;
 const cardHeight = 90*474/292;
+
+const mapWidth = 980;
+const mapHeight = 800*3578/2301;
+
 let game = document.getElementById("game");
 var rect = game.getBoundingClientRect();
 
@@ -983,12 +990,12 @@ function drawPlayerHand(player) {
         image.setAttribute("width", cardWidth);
         image.setAttribute("height", cardHeight);
         image.setAttribute("x", rect.width / 2 - cardWidth/2+cardWidth*i-40*uniqueCardsLen);
-        image.setAttribute("y", rect.height-160);
+        image.setAttribute("y", rect.height-cardHeight/2);
         let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
         let textNode = document.createTextNode(value);
         text.appendChild(textNode);
         text.setAttributeNS(null, 'x', rect.width / 2 - cardWidth/2.5+cardWidth*i-40*uniqueCardsLen);
-        text.setAttributeNS(null, 'y', rect.height-110);
+        text.setAttributeNS(null, 'y', rect.height-30);
         text.setAttribute('class', 'cardNumber');
         card.appendChild(image);
         card.appendChild(text);
@@ -997,5 +1004,61 @@ function drawPlayerHand(player) {
     }
 }
 
-console.log(board.players[0].playerTrainCards);
+function drawLeftDecks() {
+    let g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+    image.setAttributeNS(null, "href", "img/wagons/reverse_side.png");
+    image.setAttribute("width", cardWidth);
+    image.setAttribute("height", cardHeight);
+    image.setAttribute("x", rect.width - cardHeight);
+    image.setAttribute("y", rect.height-cardHeight-cardWidth);
+    image.setAttribute("class", "visibleCards")
+    g.appendChild(image);
+
+    image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+    image.setAttributeNS(null, "href", "img/special ticket.jpg");
+    image.setAttribute("width", cardWidth);
+    image.setAttribute("height", cardHeight);
+    image.setAttribute("x", rect.width - cardHeight);
+    image.setAttribute("y", rect.height - cardHeight);
+    image.setAttribute("class", "visibleCards")
+    g.appendChild(image);
+
+    for (let i = 0; i < board.visibleCards.length; i++) {
+        let trainColor = board.visibleCards[i].color;
+        let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        image.setAttributeNS(null, "href", `img/wagons/${trainColor}.png`);
+        image.setAttribute("width", cardWidth)
+        image.setAttribute("height", cardHeight);
+        image.setAttribute("x", rect.width - cardHeight);
+        image.setAttribute("y", rect.height - cardHeight - i*cardWidth - 2*cardWidth-20);
+        image.setAttribute("class", "visibleCards")
+        g.appendChild(image)
+    }
+
+    g.setAttribute("transform", "translate(-90 -45)");
+    game.appendChild(g);
+}
+
+function drawMap() {
+    let centerX = rect.width/2;
+    let centerY = rect.height/2;
+    let x = centerX - mapWidth/2;
+    let y = centerY - mapHeight/2-40;
+    let map = document.createElementNS("http://www.w3.org/2000/svg", "image");
+    map.setAttributeNS(null, "href", `img/map.jpg`);
+    map.setAttribute("width", mapWidth)
+    map.setAttribute("height", mapHeight);
+    map.setAttribute("x", x);
+    map.setAttribute("y", y);
+    map.setAttribute("class", "map")
+    game.appendChild(map);
+}
+
+function drawTickets() {
+
+}
+
 drawPlayerHand(board.players[0]);
+drawLeftDecks();
+drawMap();
