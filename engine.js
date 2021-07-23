@@ -942,17 +942,60 @@ class Board {
         trains.createDeck();
         shuffleDeck(trains.cards);
         shuffleDeck(tickets.cards);
-        console.log(trains.cards);
-        console.log(tickets.cards);
         for (let i = 0; i < this.players.length; i++) {
             this.players[i].playerTrainCards = trains.cards.splice(0, 4);
             this.players[i].playerTicketCards = tickets.cards.splice(0, 5);
-            console.log(this.players[i].playerName);
-            console.log(this.players[i].playerTicketCards);
-            console.log(this.players[i].playerTrainCards);
         }
     }
 }
 
 board = new Board()
 board.start("Me", "Player 2")
+
+
+
+
+////////////////////////////////
+///////////interface////////////
+////////////////////////////////
+const cardWidth = 90;
+const cardHeight = 90*474/292;
+let game = document.getElementById("game");
+var rect = game.getBoundingClientRect();
+
+function drawPlayerHand(player) {
+    let playerTrainCardsDict = {};
+    let uniqueCardsLen = 0;
+    for (let i = 0; i < player.playerTrainCards.length; i++) {
+        if (playerTrainCardsDict[player.playerTrainCards[i].color]) {
+            playerTrainCardsDict[player.playerTrainCards[i].color]++;
+        }
+        else {
+            playerTrainCardsDict[player.playerTrainCards[i].color] = 1;
+            uniqueCardsLen++;
+        }
+    }
+    let i = 0;
+    for (let [trainColor, value] of Object.entries(playerTrainCardsDict)) {
+        let card = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+        image.setAttributeNS(null, "href", `img/wagons/${trainColor}.png`);
+        image.setAttribute("width", cardWidth);
+        image.setAttribute("height", cardHeight);
+        image.setAttribute("x", rect.width / 2 - cardWidth/2+cardWidth*i-40*uniqueCardsLen);
+        image.setAttribute("y", rect.height-160);
+        let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        let textNode = document.createTextNode(value);
+        text.appendChild(textNode);
+        text.setAttributeNS(null, 'x', rect.width / 2 - cardWidth/2.5+cardWidth*i-40*uniqueCardsLen);
+        text.setAttributeNS(null, 'y', rect.height-110);
+        text.setAttribute('class', 'cardNumber');
+        card.appendChild(image);
+        card.appendChild(text);
+        game.appendChild(card);
+        i += 1;
+    }
+}
+
+console.log(board.players[0].playerTrainCards);
+drawPlayerHand(board.players[0]);
