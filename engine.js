@@ -13,7 +13,7 @@ class trainDeck {
         let colors = ["pink", "white", "blue", "yellow",
                       "orange", "black", "red", "green"];
 
-        for (let i = 0; i < colors.length-1; i++) {
+        for (let i = 0; i < colors.length; i++) {
             for (let j = 0; j < 12; j++) {
                 this.cards.push(new trainCard(colors[i]));
             }
@@ -932,133 +932,37 @@ class Board {
                 "locomotive": 1,
             },
         ];
+        this.trains = [];
+        this.currentPlayer = 0;
     }
+
+    // takeCardsFromDeck(player, deck) {
+    //     player.playerTrainCards.push(deck.cards.shift());
+    //     console.log(player.playerTrainCards);
+    // }
 
     start(playerOneName, playerTwoName) {
         this.players.push(new Player(playerOneName));
         this.players.push(new Player(playerTwoName));
 
-        let trains = new trainDeck();
+        this.trains = new trainDeck();
         let tickets = new ticketDeck();
-        trains.createDeck();
-        shuffleDeck(trains.cards);
+        this.trains.createDeck();
+        shuffleDeck(this.trains.cards);
         shuffleDeck(tickets.cards);
         for (let i = 0; i < this.players.length; i++) {
-            this.players[i].playerTrainCards = trains.cards.splice(0, 4);
+            this.players[i].playerTrainCards = this.trains.cards.splice(0, 4);
             this.players[i].playerTicketCards = tickets.cards.splice(0, 5);
         }
-        this.visibleCards = trains.cards.splice(0, 5);
-        console.log(this.visibleCards)
+        this.visibleCards = this.trains.cards.splice(0, 5);
+    }
+}
+
+class Move {
+    takeCards(deck) {
+        this.type = "takeCards";
     }
 }
 
 board = new Board()
 board.start("Me", "Player 2")
-
-
-
-
-////////////////////////////////
-///////////interface////////////
-////////////////////////////////
-const cardWidth = 90;
-const cardHeight = 90*474/292;
-
-const mapWidth = 980;
-const mapHeight = 800*3578/2301;
-
-let game = document.getElementById("game");
-var rect = game.getBoundingClientRect();
-
-function drawPlayerHand(player) {
-    let playerTrainCardsDict = {};
-    let uniqueCardsLen = 0;
-    for (let i = 0; i < player.playerTrainCards.length; i++) {
-        if (playerTrainCardsDict[player.playerTrainCards[i].color]) {
-            playerTrainCardsDict[player.playerTrainCards[i].color]++;
-        }
-        else {
-            playerTrainCardsDict[player.playerTrainCards[i].color] = 1;
-            uniqueCardsLen++;
-        }
-    }
-    let i = 0;
-    for (let [trainColor, value] of Object.entries(playerTrainCardsDict)) {
-        let card = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-        image.setAttributeNS(null, "href", `img/wagons/${trainColor}.png`);
-        image.setAttribute("width", cardWidth);
-        image.setAttribute("height", cardHeight);
-        image.setAttribute("x", rect.width / 2 - cardWidth/2+cardWidth*i-40*uniqueCardsLen);
-        image.setAttribute("y", rect.height-cardHeight/2);
-        let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        let textNode = document.createTextNode(value);
-        text.appendChild(textNode);
-        text.setAttributeNS(null, 'x', rect.width / 2 - cardWidth/2.5+cardWidth*i-40*uniqueCardsLen);
-        text.setAttributeNS(null, 'y', rect.height-30);
-        text.setAttribute('class', 'cardNumber');
-        card.appendChild(image);
-        card.appendChild(text);
-        game.appendChild(card);
-        i += 1;
-    }
-}
-
-function drawLeftDecks() {
-    let g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-    image.setAttributeNS(null, "href", "img/wagons/reverse_side.png");
-    image.setAttribute("width", cardWidth);
-    image.setAttribute("height", cardHeight);
-    image.setAttribute("x", rect.width - cardHeight);
-    image.setAttribute("y", rect.height-cardHeight-cardWidth);
-    image.setAttribute("class", "visibleCards")
-    g.appendChild(image);
-
-    image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-    image.setAttributeNS(null, "href", "img/special ticket.jpg");
-    image.setAttribute("width", cardWidth);
-    image.setAttribute("height", cardHeight);
-    image.setAttribute("x", rect.width - cardHeight);
-    image.setAttribute("y", rect.height - cardHeight);
-    image.setAttribute("class", "visibleCards")
-    g.appendChild(image);
-
-    for (let i = 0; i < board.visibleCards.length; i++) {
-        let trainColor = board.visibleCards[i].color;
-        let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-        image.setAttributeNS(null, "href", `img/wagons/${trainColor}.png`);
-        image.setAttribute("width", cardWidth)
-        image.setAttribute("height", cardHeight);
-        image.setAttribute("x", rect.width - cardHeight);
-        image.setAttribute("y", rect.height - cardHeight - i*cardWidth - 2*cardWidth-20);
-        image.setAttribute("class", "visibleCards")
-        g.appendChild(image)
-    }
-
-    g.setAttribute("transform", "translate(-90 -45)");
-    game.appendChild(g);
-}
-
-function drawMap() {
-    let centerX = rect.width/2;
-    let centerY = rect.height/2;
-    let x = centerX - mapWidth/2;
-    let y = centerY - mapHeight/2-40;
-    let map = document.createElementNS("http://www.w3.org/2000/svg", "image");
-    map.setAttributeNS(null, "href", `img/map.jpg`);
-    map.setAttribute("width", mapWidth)
-    map.setAttribute("height", mapHeight);
-    map.setAttribute("x", x);
-    map.setAttribute("y", y);
-    map.setAttribute("class", "map")
-    game.appendChild(map);
-}
-
-function drawTickets() {
-
-}
-
-drawPlayerHand(board.players[0]);
-drawLeftDecks();
-drawMap();
