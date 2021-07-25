@@ -92,11 +92,11 @@ class ticketDeck {
                 "cost": 5,
             },
             {
-                "cities": ["Fukuoka",  "Okayama"],
+                "cities": ["Fukushima",  "Okayama"],
                 "cost": 4,
             },
             {
-                "cities": ["Fukuoka",  "Osaka"],
+                "cities": ["Fukushima",  "Osaka"],
                 "cost": 6,
             },
             {
@@ -140,11 +140,11 @@ class ticketDeck {
                 "cost": 8,
             },
             {
-                "cities": ["Hachinone",  "Korsakov"],
+                "cities": ["Hachinohe",  "Korsakov"],
                 "cost": 10,
             },
             {
-                "cities": ["Hachinone",  "Asahikawa"],
+                "cities": ["Hachinohe",  "Asahikawa"],
                 "cost": 4,
             },
             {
@@ -235,6 +235,7 @@ class Board {
     constructor() {
         this.players = [];
         this.visibleCards = [];
+        this.tickets = [];
         this.railways = [
             {
                 "cities": ["Kagoshima", "Miayzaki"],
@@ -936,23 +937,17 @@ class Board {
         this.currentPlayer = 0;
     }
 
-    // takeCardsFromDeck(player, deck) {
-    //     player.playerTrainCards.push(deck.cards.shift());
-    //     console.log(player.playerTrainCards);
-    // }
-
     start(playerOneName, playerTwoName) {
         this.players.push(new Player(playerOneName));
         this.players.push(new Player(playerTwoName));
-
         this.trains = new trainDeck();
-        let tickets = new ticketDeck();
+        this.tickets = new ticketDeck();
         this.trains.createDeck();
         shuffleDeck(this.trains.cards);
-        shuffleDeck(tickets.cards);
+        shuffleDeck(this.tickets.cards);
         for (let i = 0; i < this.players.length; i++) {
             this.players[i].playerTrainCards = this.trains.cards.splice(0, 4);
-            this.players[i].playerTicketCards = tickets.cards.splice(0, 5);
+            this.players[i].playerTicketCards = this.tickets.cards.splice(0, 3);
         }
         this.visibleCards = this.trains.cards.splice(0, 5);
     }
