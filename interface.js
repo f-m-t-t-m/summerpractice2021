@@ -457,3 +457,10 @@ document.addEventListener("click", function (e) {
         drawPlayerTickets(board.players[0]);
     }
 });
+
+let path = document.getElementsByTagName("path");
+for(let i = 0; i < path.length; i++) {
+    path[i].addEventListener("click",function (){
+        alert("123");
+    });
+}
