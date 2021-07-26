@@ -88,12 +88,42 @@
     .map {
         position: relative;
     }
+    .svg_ {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: 10;
+    }
+    path{
+        z-index: 20;
+    }
+    .railway {
+        /*z-index: 2;*/
+        opacity: 0.2;
+    }
+    .railway:hover {
+        /*z-index: 2;*/
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+        opacity: 0.8;
+    }
 </style>
 
 <body>
 <svg id="game" width="100%" height="100vh" fill="none" style="position: relative; z-index: 1"></svg>
 <div class="mapContainer">
     <div class="map">
+        <svg viewBox="0 0 945 608" class="svg_">
+            <path class="railway" d="M 242.77259,106.08014 C 303.24831,74.215582 362.81834,91.125761 420.40238,87.213644
+                                     v 8.543317 C 362.55512,100.03475 303.55192,89.863143 247.40022,115.3354 Z" fill="red"
+            >
+            </path>
+            <path class="railway" d="m 405.09561,205.75217 71.55028,120.31837 -9.25526,4.62763 -71.19431,-118.89449 z"
+                                     fill="red">
+            </path>
+        </svg>
         <img src="img/map.jpg" width="945px">
     </div>
 </div>
