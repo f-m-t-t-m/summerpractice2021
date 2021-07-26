@@ -10,13 +10,14 @@
     * {
         margin: 0;
         padding: 0;
-        background-image: url("img/background.jpg");
+
         box-sizing: border-box;
     }
 
     body {
         min-height: 100vh;
         display: flex;
+        background-image: url("img/background.jpg");
     }
 
     .cardNumber {
@@ -74,11 +75,31 @@
         transform-origin: center;
         transform: scale(1.25);
     }
+
+    .mapContainer {
+        position: absolute;
+        width: 945px;
+        left: 0;
+        right: 0;
+        top: 10px;
+        margin: auto
+    }
+
+    .map {
+        position: relative;
+    }
 </style>
 
 <body>
-<svg id="game" width="100%" height="100vh" viewBox="0 0 1500 721">
-</svg>
+<svg id="game" width="100%" height="100vh" fill="none" style="position: relative; z-index: 1"></svg>
+<div class="mapContainer">
+    <div class="map">
+        <img src="img/map.jpg" width="945px">
+    </div>
+</div>
+
+
+
 <script src="engine.js"></script>
 <script src="interface.js"></script>
 </body>

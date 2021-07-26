@@ -1,14 +1,17 @@
+let game = document.getElementById("game");
+let rect = game.getBoundingClientRect();
+
 const cardWidth = 90;
 const cardHeight = 90*474/292;
 
-const mapWidth = 975;
-const mapHeight = 975*2301/3578;
+const mapWidth = rect.width/1.6;
+const mapHeight = mapWidth*2301/3578;
 
-let game = document.getElementById("game");
+
 game.addEventListener("click", function (e) {
     console.log(e.clientX, e.clientY);
 });
-var rect = game.getBoundingClientRect();
+
 
 function drawPlayerHand(player) {
     let playerTrainCardsDict = {};
@@ -137,20 +140,30 @@ function addAnimation(image, yPos=0, xFrom=0, yFrom=0) {
     g.appendChild(image);
 }
 
-function drawMap() {
-    let centerX = rect.width/2;
-    let centerY = rect.height/2;
-    let x = centerX - mapWidth/2;
-    let y = centerY - mapHeight/2-40;
-    let map = document.createElementNS("http://www.w3.org/2000/svg", "image");
-    map.setAttributeNS(null, "href", `img/map.jpg`);
-    map.setAttribute("width", mapWidth)
-    map.setAttribute("height", mapHeight);
-    map.setAttribute("x", x);
-    map.setAttribute("y", y);
-    map.setAttribute("class", "map");
-    game.appendChild(map);
-}
+// function drawPath() {
+//     let pathes = document.createElementNS("http://www.w3.org/2000/svg", "g");
+//     let map = document.getElementsByClassName("map")[0];
+//     let path = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+//     path.setAttribute("points", `325, 277, 500, 125`);
+//     path.classList.add("path");
+//     pathes.appendChild(path);
+//     game.appendChild(pathes);
+// }
+
+// function drawMap() {
+//     let centerX = rect.width/2;
+//     let centerY = rect.height/2;
+//     let x = centerX - mapWidth/2;
+//     let y = centerY - mapHeight/2-40;
+//     let map = document.createElementNS("http://www.w3.org/2000/svg", "image");
+//     map.setAttributeNS(null, "href", `img/map.jpg`);
+//     map.setAttribute("width", mapWidth)
+//     map.setAttribute("height", mapHeight);
+//     map.setAttribute("x", x);
+//     map.setAttribute("y", y);
+//     map.setAttribute("class", "map");
+//     game.appendChild(map);
+// }
 
 function drawTicketChoice() {
     let tickets = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -410,7 +423,7 @@ function redrawPlayerCards() {
     drawPlayerHand(board.players[0]);
 }
 
-drawMap();
+// drawMap();
 drawPlayerHand(board.players[0]);
 
 drawRightDecks();
