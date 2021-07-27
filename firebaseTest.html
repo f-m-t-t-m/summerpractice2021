@@ -4,17 +4,36 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<style>
+    .chosen {
+        background: forestgreen;
+    }
+</style>
 <body>
 <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
-<script src="firebase.js"></script>
+
 
     <p>Создание комнаты</p>
     <input type="text" placeholder="Your name" id="hostName"> <br>
     <input type="text" placeholder="Room name" id="roomName"> <br>
-    <input type="text" placeholder="Maximum Players" id="maxPlayersNum"><br>
+    <input type="text" min="2" max="4" placeholder="Maximum Players" id="maxPlayersNum"><br>
     <button type="button" id="create" onclick="createRoom()">Create room</button>
 
+    <br>
+    <br>
+    <table border="1" id="table">
+        <tr><td>Список комнат</td></tr>
+    </table>
+
+    <button type="button" id="join">Join room</button>
+    <div id="players">
+
+    </div>
+
+    <button id="play">Играть</button>
+
+<script src="firebase.js"></script>
 </body>
 </html>

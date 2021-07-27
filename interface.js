@@ -463,6 +463,5 @@ document.addEventListener("click", function (e) {
 let path = document.getElementsByTagName("path");
 for(let i = 0; i < path.length; i++) {
     path[i].addEventListener("click",function (){
-        alert("123");
     });
 }
