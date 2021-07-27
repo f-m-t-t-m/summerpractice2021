@@ -45,6 +45,8 @@ function drawPlayerHand(player) {
         card.appendChild(image);
         card.appendChild(text);
         playerCards.appendChild(card);
+        card.setAttribute("color", trainColor);
+        card.setAttribute("number", value);
         i += 1;
     }
     playerCards.setAttribute("class", "playerCards");

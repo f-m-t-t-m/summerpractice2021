@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
+<script src="firebase.js"></script>
+
+    <p>Создание комнаты</p>
+    <input type="text" placeholder="Your name" id="hostName"> <br>
+    <input type="text" placeholder="Room name" id="roomName"> <br>
+    <input type="text" placeholder="Maximum Players" id="maxPlayersNum"><br>
+    <button type="button" id="create" onclick="createRoom()">Create room</button>
+
+</body>
+</html>
