@@ -1067,11 +1067,13 @@ class Board {
         ];
         this.trains = [];
         this.currentPlayer = 0;
+        this.colors = ["green", "orange", "red", "blue"];
     }
 
-    start(playerOneName, playerTwoName) {
-        this.players.push(new Player(playerOneName));
-        this.players.push(new Player(playerTwoName));
+    start(players) {
+        for (let i = 0; i < players.length; i++) {
+            this.players.push(new Player(players[i]));
+        }
         this.trains = new trainDeck();
         this.tickets = new ticketDeck();
         this.trains.createDeck();
@@ -1084,12 +1086,3 @@ class Board {
         this.visibleCards = this.trains.cards.splice(0, 5);
     }
 }
-
-class Move {
-    takeCards(deck) {
-        this.type = "takeCards";
-    }
-}
-
-board = new Board()
-board.start("Me", "Player 2")

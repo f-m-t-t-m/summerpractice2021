@@ -1,19 +1,13 @@
-let game = document.getElementById("game");
-let rect = game.getBoundingClientRect();
-
-const cardWidth = 90;
-const cardHeight = 90*474/292;
-
-const mapWidth = rect.width/1.6;
-const mapHeight = mapWidth*2301/3578;
-
-
-game.addEventListener("click", function (e) {
-    console.log(e.clientX, e.clientY);
-});
-
-
 function drawPlayerHand(player) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
+
     let playerTrainCardsDict = {};
     let uniqueCardsLen = 0;
     for (let i = 0; i < player.playerTrainCards.length; i++) {
@@ -54,7 +48,15 @@ function drawPlayerHand(player) {
 }
 
 let g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-function drawRightDecks() {
+function drawRightDecks(board) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     for(let i = 0; i < board.trains.cards.length; i++) {
         let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
         image.setAttributeNS(null, "href", "img/wagons/reverse_side.png");
@@ -102,6 +104,14 @@ function drawRightDecks() {
 }
 
 function addAnimation(image, yPos=0, xFrom=0, yFrom=0) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     let animation = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
     animation.setAttribute("attributeName", "transform");
     animation.setAttribute("type", "translate");
@@ -142,32 +152,15 @@ function addAnimation(image, yPos=0, xFrom=0, yFrom=0) {
     g.appendChild(image);
 }
 
-// function drawPath() {
-//     let pathes = document.createElementNS("http://www.w3.org/2000/svg", "g");
-//     let map = document.getElementsByClassName("map")[0];
-//     let path = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-//     path.setAttribute("points", `325, 277, 500, 125`);
-//     path.classList.add("path");
-//     pathes.appendChild(path);
-//     game.appendChild(pathes);
-// }
+function drawTicketChoice(board) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
 
-// function drawMap() {
-//     let centerX = rect.width/2;
-//     let centerY = rect.height/2;
-//     let x = centerX - mapWidth/2;
-//     let y = centerY - mapHeight/2-40;
-//     let map = document.createElementNS("http://www.w3.org/2000/svg", "image");
-//     map.setAttributeNS(null, "href", `img/map.jpg`);
-//     map.setAttribute("width", mapWidth)
-//     map.setAttribute("height", mapHeight);
-//     map.setAttribute("x", x);
-//     map.setAttribute("y", y);
-//     map.setAttribute("class", "map");
-//     game.appendChild(map);
-// }
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
 
-function drawTicketChoice() {
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     let tickets = document.createElementNS("http://www.w3.org/2000/svg", "g");
     tickets.classList.add("ticketList")
     let ticketNum = Math.min(3, board.tickets.cards.length);
@@ -220,6 +213,14 @@ function drawTicketChoice() {
 }
 
 function drawPlayerTickets(player) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     let tickets = player.playerTicketCards;
     for(let i = tickets.length-1; i >= 0; i--) {
         let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
@@ -236,6 +237,14 @@ function drawPlayerTickets(player) {
 }
 
 function takeTrainCards(board, target) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     let takenCardsNum = 0;
     let locomotiveFlag = 0;
     let deck = document.getElementsByClassName("takeCardsDeck");
@@ -258,6 +267,14 @@ function takeTrainCards(board, target) {
 }
 
 function takeVisibleCards(board, target) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     let takenCardsNum = 0;
     let locomotiveFlag = 0;
     let deck = document.getElementsByClassName("takeCardsDeck");
@@ -343,6 +360,14 @@ function takeVisibleCards(board, target) {
 }
 
 function takeTickets(board) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     let ticketsToChoose = drawTicketChoice();
     let visibleCards = document.getElementsByClassName("visibleCards");
     let ticketCards = document.getElementsByClassName("ticketCards")
@@ -418,6 +443,14 @@ function takeTickets(board) {
 }
 
 function redrawPlayerCards() {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     let cards = document.getElementsByClassName("card");
     for(let i = cards.length-1; i >= 0; i--) {
         cards[i].parentNode.removeChild(cards[i]);
@@ -425,43 +458,109 @@ function redrawPlayerCards() {
     drawPlayerHand(board.players[0]);
 }
 
-// drawMap();
-drawPlayerHand(board.players[0]);
+function drawOtherPlayers(board, me) {
+    let game = document.getElementById("game");
+    let otherPlayerIndex = 0;
+    for(let i = 0; i < board.players.length; i++) {
+        if (board.players[i].playerName != me) {
+            let otherPlayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            let btn = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 
-drawRightDecks();
-document.addEventListener("click", function (e) {
-    if (e.target && e.target.classList.contains("ticketDeck")) {
-        takeTickets(board);
-    }
-});
-document.addEventListener("click", function (e) {
-    if (e.target && e.target.classList.contains("visibleCards")) {
-        takeVisibleCards(board, e.target);
-    }
-});
-document.addEventListener("click", function (e) {
-    if (e.target && e.target.classList.contains("takeCardsDeck")) {
-        takeTrainCards(board, e.target);
-    }
-});
+            btn.setAttributeNS(null, 'x', 75);
+            btn.setAttributeNS(null, 'y', 10 + 110*otherPlayerIndex);
+            btn.setAttributeNS(null, 'width', 150);
+            btn.setAttributeNS(null, 'height', 90);
+            btn.setAttributeNS(null, 'rx', 5);
+            btn.setAttributeNS(null, 'ty', 5);
+            btn.setAttributeNS(null, 'fill', board.colors[i]);
+            otherPlayer.appendChild(btn);
 
-drawPlayerTickets(board.players[0])
-document.addEventListener("click", function (e) {
-    if (e.target && e.target.classList.contains("playerTicket")) {
-        let index = e.target.getAttribute("index");
-        let tmp = board.players[0].playerTicketCards[index];
-        board.players[0].playerTicketCards[index] = board.players[0].playerTicketCards[0]
-        board.players[0].playerTicketCards[0] = tmp;
-        let tick = document.getElementsByClassName("playerTicket");
-        for(let i = tick.length-1; i >= 0; i--) {
-            tick[i].parentNode.removeChild(tick[i]);
+            let textNode = document.createTextNode(board.players[i].playerName);
+            let btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            btnText.appendChild(textNode);
+            btnText.classList.add("otherPlayerName");
+            btnText.setAttributeNS(null, 'x', 80);
+            btnText.setAttributeNS(null, 'y', 35 + 110*otherPlayerIndex);
+            otherPlayer.appendChild(btnText);
+
+            textNode = document.createTextNode(`Поездов ${board.players[i].trains}`);
+            btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            btnText.appendChild(textNode);
+            btnText.classList.add("otherPlayerStat");
+            btnText.classList.add("otherPlayerTrains");
+            btnText.setAttributeNS(null, 'x', 80);
+            btnText.setAttributeNS(null, 'y', 65 + 110*otherPlayerIndex);
+            otherPlayer.appendChild(btnText);
+
+            textNode = document.createTextNode(`Карт поездов ${board.players[i].playerTrainCards.length}`);
+            btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            btnText.appendChild(textNode);
+            btnText.classList.add("otherPlayerStat");
+            btnText.classList.add("otherPlayerCards");
+            btnText.setAttributeNS(null, 'x', 80);
+            btnText.setAttributeNS(null, 'y', 75 + 110*otherPlayerIndex);
+            otherPlayer.appendChild(btnText);
+
+            textNode = document.createTextNode(`Карт маршрутов ${board.players[i].playerTicketCards.length}`);
+            btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            btnText.appendChild(textNode);
+            btnText.classList.add("otherPlayerStat");
+            btnText.classList.add("otherPlayerTickets");
+            btnText.setAttributeNS(null, 'x', 80);
+            btnText.setAttributeNS(null, 'y', 85 + 110*otherPlayerIndex);
+            otherPlayer.appendChild(btnText);
+
+
+            otherPlayer.classList.add("otherPlayer");
+            game.appendChild(otherPlayer);
+
+            otherPlayerIndex++;
         }
-        drawPlayerTickets(board.players[0]);
     }
-});
-
-let path = document.getElementsByTagName("path");
-for(let i = 0; i < path.length; i++) {
-    path[i].addEventListener("click",function (){
-    });
 }
+
+play = document.getElementById("play");
+play.addEventListener("click", function(){
+    firebase.database().ref('rooms/' + room).update({
+        gameStarted: 1,
+    });
+    // let menu = document.getElementById("menu");
+    // menu.classList.add("hide");
+    // let gam = document.getElementById("gameMain");
+    // gam.classList.remove("hide");
+    //
+    // drawPlayerHand(board.players[0]);
+    //
+    // drawRightDecks();
+    //
+    // document.addEventListener("click", function (e) {
+    //     if (e.target && e.target.classList.contains("ticketDeck")) {
+    //         takeTickets(board);
+    //     }
+    // });
+    // document.addEventListener("click", function (e) {
+    //     if (e.target && e.target.classList.contains("visibleCards")) {
+    //         takeVisibleCards(board, e.target);
+    //     }
+    // });
+    // document.addEventListener("click", function (e) {
+    //     if (e.target && e.target.classList.contains("takeCardsDeck")) {
+    //         takeTrainCards(board, e.target);
+    //     }
+    // });
+    //
+    // drawPlayerTickets(board.players[0])
+    // document.addEventListener("click", function (e) {
+    //     if (e.target && e.target.classList.contains("playerTicket")) {
+    //         let index = e.target.getAttribute("index");
+    //         let tmp = board.players[0].playerTicketCards[index];
+    //         board.players[0].playerTicketCards[index] = board.players[0].playerTicketCards[0]
+    //         board.players[0].playerTicketCards[0] = tmp;
+    //         let tick = document.getElementsByClassName("playerTicket");
+    //         for(let i = tick.length-1; i >= 0; i--) {
+    //             tick[i].parentNode.removeChild(tick[i]);
+    //         }
+    //         drawPlayerTickets(board.players[0]);
+    //     }
+    // });
+});
