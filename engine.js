@@ -276,7 +276,7 @@ class Board {
             {
                 "id": 6,
                 "cities": ["Miayzaki", "Kochi"],
-                "length": 3,
+                "length": 4,
                 "color": "blue",
                 "locomotive": 1,
                 "cost": 7,
@@ -298,7 +298,7 @@ class Board {
             {
                 "id": 9,
                 "cities": ["Fukuoka", "Yamaguchi"],
-                "length": 0,
+                "length": 1,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 1,
@@ -306,7 +306,7 @@ class Board {
             {
                 "id": 10,
                 "cities": ["Fukuoka", "Matsue"],
-                "length": 5,
+                "length": 6,
                 "color": "black",
                 "locomotive": 1,
                 "cost": 15,
@@ -314,7 +314,7 @@ class Board {
             {
                 "id": 11,
                 "cities": ["Oita", "Matsuyama"],
-                "length": 0,
+                "length": 1,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 1,
@@ -322,7 +322,7 @@ class Board {
             {
                 "id": 12,
                 "cities": ["Fukuoka", "Taipei"],
-                "length": 4,
+                "length": 5,
                 "color": "red",
                 "locomotive": 1,
                 "cost": 10,
@@ -330,7 +330,7 @@ class Board {
             {
                 "id": 13,
                 "cities": ["Taipei", "Shanghai"],
-                "length": 3,
+                "length": 4,
                 "color": "green",
                 "locomotive": 1,
                 "cost": 7,
@@ -338,7 +338,7 @@ class Board {
             {
                 "id": 14,
                 "cities": ["Taipei", "Dalian"],
-                "length": 5,
+                "length": 6,
                 "color": "white",
                 "locomotive": 1,
                 "cost": 15,
@@ -353,7 +353,7 @@ class Board {
             {
                 "id": 16,
                 "cities": ["Kochi", "Wakayama"],
-                "length": 2,
+                "length": 3,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 4,
@@ -375,7 +375,7 @@ class Board {
             {
                 "id": 19,
                 "cities": ["Matsuyama", "Hiroshima"],
-                "length": 0,
+                "length": 1,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 1,
@@ -404,7 +404,7 @@ class Board {
             {
                 "id": 23,
                 "cities": ["Shanghai", "Dalian"],
-                "length": 4,
+                "length": 5,
                 "color": "orange",
                 "locomotive": 1,
                 "cost": 10,
@@ -419,7 +419,7 @@ class Board {
             {
                 "id": 25,
                 "cities": ["Shanghai", "Matsue"],
-                "length": 4,
+                "length": 5,
                 "color": "pink",
                 "locomotive": 1,
                 "cost": 10,
@@ -427,7 +427,7 @@ class Board {
             {
                 "id": 26,
                 "cities": ["Wakayama", "Takamatsu"],
-                "length": 1,
+                "length": 2,
                 "color": "yellow",
                 "locomotive": 1,
                 "cost": 2,
@@ -449,7 +449,7 @@ class Board {
             {
                 "id": 29,
                 "cities": ["Takamatsu", "Okayama"],
-                "length": 0,
+                "length": 1,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 1,
@@ -506,7 +506,7 @@ class Board {
             {
                 "id": 37,
                 "cities": ["Fukuoka", "Yamaguchi"],
-                "length": 0,
+                "length": 1,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 1,
@@ -514,7 +514,7 @@ class Board {
             {
                 "id": 38,
                 "cities": ["Qingdao", "Seoul"],
-                "length": 2,
+                "length": 3,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 4,
@@ -529,7 +529,7 @@ class Board {
             {
                 "id": 40,
                 "cities": ["Qingdao", "Miyazu"],
-                "length": 4,
+                "length": 5,
                 "color": "green",
                 "locomotive": 1,
                 "cost": 10,
@@ -537,7 +537,7 @@ class Board {
             {
                 "id": 41,
                 "cities": ["Dalian", "Seoul"],
-                "length": 3,
+                "length": 4,
                 "color": "blue",
                 "locomotive": 1,
                 "cost": 7,
@@ -552,7 +552,7 @@ class Board {
             {
                 "id": 43,
                 "cities": ["Shima", "Tokyo"],
-                "length": 5,
+                "length": 6,
                 "color": "yellow",
                 "locomotive": 1,
                 "cost": 15,
@@ -588,7 +588,7 @@ class Board {
             {
                 "id": 48,
                 "cities": ["Miyazu", "Seoul"],
-                "length": 4,
+                "length": 5,
                 "color": "red",
                 "locomotive": 1,
                 "cost": 10,
@@ -596,7 +596,7 @@ class Board {
             {
                 "id": 49,
                 "cities": ["Miyazu", "Fukui"],
-                "length": 0,
+                "length": 1,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 1,
@@ -611,7 +611,7 @@ class Board {
             {
                 "id": 51,
                 "cities": ["Seoul", "Pyongyang"],
-                "length": 3,
+                "length": 4,
                 "color": "yellow",
                 "locomotive": 1,
                 "cost": 7,
@@ -675,7 +675,7 @@ class Board {
             {
                 "id": 60,
                 "cities": ["Fukui", "Suzu"],
-                "length": 3,
+                "length": 4,
                 "color": "white",
                 "locomotive": 1,
                 "cost": 7,
@@ -683,7 +683,7 @@ class Board {
             {
                 "id": 61,
                 "cities": ["Busan", "Suzu"],
-                "length": 3,
+                "length": 4,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 7,
@@ -796,7 +796,7 @@ class Board {
             {
                 "id": 77,
                 "cities": ["Suzu", "Pyongyang"],
-                "length": 5,
+                "length": 6,
                 "color": "green",
                 "locomotive": 1,
                 "cost": 15,
@@ -804,7 +804,7 @@ class Board {
             {
                 "id": 78,
                 "cities": ["Suzu", "Niigata"],
-                "length": 2,
+                "length": 3,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 4,
@@ -819,7 +819,7 @@ class Board {
             {
                 "id": 80,
                 "cities": ["Pyongyang", "Vladivostok"],
-                "length": 3,
+                "length": 4,
                 "color": "red",
                 "locomotive": 1,
                 "cost": 7,
@@ -834,7 +834,7 @@ class Board {
             {
                 "id": 82,
                 "cities": ["Mito", "Kaohsiung"],
-                "length": 5,
+                "length": 6,
                 "color": "blue",
                 "locomotive": 1,
                 "cost": 15,
@@ -842,7 +842,7 @@ class Board {
             {
                 "id": 83,
                 "cities": ["Mito", "Sendai"],
-                "length": 4,
+                "length": 5,
                 "color": "pink",
                 "locomotive": 1,
                 "cost": 10,
@@ -947,7 +947,7 @@ class Board {
             {
                 "id": 98,
                 "cities": ["Niigata", "Chongjin"],
-                "length": 4,
+                "length": 5,
                 "color": "yellow",
                 "locomotive": 1,
                 "cost": 10,
@@ -955,7 +955,7 @@ class Board {
             {
                 "id": 99,
                 "cities": ["Niigata", "Vladivostok"],
-                "length": 4,
+                "length": 5,
                 "color": "white",
                 "locomotive": 1,
                 "cost": 10,
@@ -984,7 +984,7 @@ class Board {
             {
                 "id": 103,
                 "cities": ["Vladivostok", "Korsakov"],
-                "length": 3,
+                "length": 4,
                 "color": "pink",
                 "locomotive": 1,
                 "cost": 7,
@@ -992,7 +992,7 @@ class Board {
             {
                 "id": 104,
                 "cities": ["Korsakov", "Wakkanai"],
-                "length": 3,
+                "length": 4,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 7,
@@ -1071,7 +1071,7 @@ class Board {
             {
                 "id": 115,
                 "cities": ["Obihiro", "Hakodate"],
-                "length": 1,
+                "length": 2,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 2,
@@ -1079,7 +1079,7 @@ class Board {
             {
                 "id": 116,
                 "cities": ["Obihiro", "Hachinohe"],
-                "length": 3,
+                "length": 4,
                 "color": "pink",
                 "locomotive": 1,
                 "cost": 7,
@@ -1087,7 +1087,7 @@ class Board {
             {
                 "id": 117,
                 "cities": ["Hakodate", "Akita"],
-                "length": 4,
+                "length": 5,
                 "color": "blue",
                 "locomotive": 1,
                 "cost": 10,
@@ -1095,7 +1095,7 @@ class Board {
             {
                 "id": 118,
                 "cities": ["Hakodate", "Aomori"],
-                "length": 0,
+                "length": 1,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 1,
@@ -1103,7 +1103,7 @@ class Board {
             {
                 "id": 119,
                 "cities": ["Hakodate", "Aomori"],
-                "length": 0,
+                "length": 1,
                 "color": "grey",
                 "locomotive": 1,
                 "cost": 1,
@@ -1153,7 +1153,7 @@ class Board {
             {
                 "id": 126,
                 "cities": ["Hachinohe", "Sendai"],
-                "length": 5,
+                "length": 6,
                 "color": "orange",
                 "locomotive": 1,
                 "cost": 15,
@@ -1189,7 +1189,7 @@ class Board {
             {
                 "id": 131,
                 "cities": ["Taipei", "Busan"],
-                "length": 3,
+                "length": 4,
                 "color": "orange",
                 "locomotive": 1,
                 "cost": 7,
