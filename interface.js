@@ -77,151 +77,160 @@ function drawPlayersPath() {
     for (let i = 0; i < cards.length; i++) {
         cards[i].addEventListener("click", function (){
             let playerTrainCard = board.players[0]["playerTrainCards"];
-            console.log(playerTrainCard);
             if (!cards[i].classList.contains("selected")) {
                 for (let j = 0; j < cards.length; j++) {
+                    if (cards[j].getAttribute("color") === "locomotive") {
+                        cardLocomotive = cards[j];
+                        checkLocomotive = true;
+                        countLocomotive = cards[j].getAttribute("number");
+                        break;
+                    }
+                }
+                for (let j = 0; j < cards.length; j++) {
                     cards[j].classList.remove("selected");
-                    cards[i].classList.add("selected");
-                    let colorWagon, countWagon;
-                    for(let j = 0; j < paths.length; j++) {
-                        if (!unavailablePathsId.has(paths[j].getAttribute("id"))) {
-                            paths[j].classList.add("hide");
+                }
+                cards[i].classList.add("selected");
+                let colorWagon, countWagon;
+                console.log(unavailablePathsId);
+                for(let j = 0; j < paths.length; j++) {
+                    if (!unavailablePathsId.has(paths[j].getAttribute("id"))) {
+                        paths[j].classList.add("hide");
+                    }
+                }
+                if (checkLocomotive) {
+                    colorWagon = cards[i].getAttribute("color");
+                    countWagon = Number(cards[i].getAttribute("number")) + Number(countLocomotive);
+                    let countCardsSameColor = Number(cards[i].getAttribute("number"));
+                    let availablePaths = allRailways.filter(item => Number(item["length"]) <= countWagon);
+                    availablePaths = availablePaths.filter(item => (item["color"] === colorWagon || item["color"] === "grey"));
+                    let availablePathsId = [];
+                    for (let j = 0; j < availablePaths.length; j++) {
+                        if (!unavailablePathsId.has(String(availablePaths[j]["id"]))) {
+                            availablePathsId.push(availablePaths[j]["id"]);
                         }
                     }
-                    if (checkLocomotive) {
-                        colorWagon = cards[i].getAttribute("color");
-                        countWagon = Number(cards[i].getAttribute("number")) + Number(countLocomotive);
-                        let countCardsSameColor = Number(cards[i].getAttribute("number"));
-                        let availablePaths = allRailways.filter(item => Number(item["length"]) <= countWagon);
-                        availablePaths = availablePaths.filter(item => (item["color"] === colorWagon || item["color"] === "grey"));
-                        let availablePathsId = [];
-                        for (let j = 0; j < availablePaths.length; j++) {
-                            if (!unavailablePathsId.has(String(availablePaths[j]["id"]))) {
-                                availablePathsId.push(availablePaths[j]["id"]);
-                            }
-                        }
-                        for (let j = 0; j < availablePathsId.length; j++) {
-                            if (!unavailablePathsId.has(availablePathsId[j])) {
-                                let availablePath = document.getElementById(availablePathsId[j]);
-                                availablePath.classList.remove("hide");
-                                availablePath.addEventListener("click", function (){
-                                    let lengthPath = allRailways[Number(availablePath.getAttribute("id")) - 1]["length"];
-                                    if (railwaysWithLocomotiveId.includes(Number(availablePath.getAttribute("id")))) {
-                                        // for (let k = playerTrainCard.length - 1; k >= 0; k--) {
-                                        //     if (playerTrainCard[k]["color"] === "locomotive") {
-                                        //         delete playerTrainCard[k];
-                                        //         break;
-                                        //     }
-                                        // }
-                                        cardLocomotive.setAttribute("number", String(countLocomotive - 1));
-                                        lengthPath = lengthPath - 1;
-                                        if (lengthPath <= countCardsSameColor) {
-                                            cards[i].setAttribute("number", String(countCardsSameColor - lengthPath));
-                                        } else {
-                                            // let len = lengthPath - countCardsSameColor;
-                                            // while (countCardsSameColor !== 0) {
-                                            //     for (let k = playerTrainCard.length - 1; k >= 0; k--) {
-                                            //         if (playerTrainCard[k]["color"] === colorWagon) {
-                                            //             delete playerTrainCard[k];
-                                            //             break
-                                            //         }
-                                            //     }
-                                            //     countCardsSameColor -= 1;
-                                            // }
-                                            cards[i].setAttribute("number", "0");
-                                            // while (len !== 0) {
-                                            //     for (let k = playerTrainCard.length - 1; k >= 0; k--) {
-                                            //         if (playerTrainCard[k]["color"] === "locomotive") {
-                                            //             delete playerTrainCard[k];
-                                            //             break
-                                            //         }
-                                            //     }
-                                            //     len -= 1;
-                                            // }
-                                            cardLocomotive.setAttribute("number", String(countLocomotive - (lengthPath - countCardsSameColor)));
+                    for (let j = 0; j < availablePathsId.length; j++) {
+                        if (!unavailablePathsId.has(availablePathsId[j])) {
+                            let availablePath = document.getElementById(availablePathsId[j]);
+                            availablePath.classList.remove("hide");
+                            availablePath.addEventListener("click", function (){
+                                let lengthPath = allRailways[Number(availablePath.getAttribute("id")) - 1]["length"];
+                                if (railwaysWithLocomotiveId.includes(Number(availablePath.getAttribute("id")))) {
+                                    for (let k = playerTrainCard.length-1; k >= 0; k--) {
+                                        if (playerTrainCard[k]["color"] === "locomotive") {
+                                            playerTrainCard.splice(k, 1);
+                                            break;
                                         }
+                                    }
+                                    lengthPath--;
+                                    cardLocomotive.setAttribute("number", String(countLocomotive - 1));
+                                    if (lengthPath <= countCardsSameColor) {
+                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
+                                            if (playerTrainCard[k]["color"] === colorWagon && lengthPath !== 0) {
+                                                playerTrainCard.splice(k, 1);
+                                                lengthPath--;
+                                            }
+                                        }
+                                        cards[i].setAttribute("number", String(countCardsSameColor - lengthPath));
                                     } else {
-                                        if (lengthPath <= countCardsSameColor) {
-                                            // while ((countCardsSameColor - lengthPath) !== 0) {
-                                            //     for (let k = playerTrainCard.length - 1; k >= 0; k--) {
-                                            //         if (playerTrainCard[k]["color"] === colorWagon) {
-                                            //             delete playerTrainCard[k];
-                                            //             break;
-                                            //         }
-                                            //     }
-                                            //     countCardsSameColor -= 1;
-                                            // }
-                                            cards[i].setAttribute("number", String(countCardsSameColor - lengthPath));
-                                        } else {
-                                            // while ((countCardsSameColor - lengthPath) !== 0) {
-                                            //     for (let k = playerTrainCard.length - 1; k >= 0; k--) {
-                                            //         if (playerTrainCard[k]["color"] === colorWagon) {
-                                            //             delete playerTrainCard[k];
-                                            //             break;
-                                            //         }
-                                            //     }
-                                            //     countCardsSameColor -= 1;
-                                            // }
-                                            cards[i].setAttribute("number", "0");
-                                            cardLocomotive.setAttribute("number", String(countLocomotive - (lengthPath - countCardsSameColor)));
+                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
+                                            if (playerTrainCard[k]["color"] === colorWagon) {
+                                                playerTrainCard.splice(k, 1);
+                                                lengthPath--;
+                                            }
                                         }
-                                    }
-                                    availablePath.setAttribute("fill", "purple");
-                                    unavailablePathsId.add(availablePath.getAttribute("id"));
-                                    availablePath.classList.add("unavailable");
-                                    allRailways[Number(availablePath.getAttribute("id")) - 1].player = "purple";
-                                    cards[i].classList.remove("selected");
-                                    for(let j = 0; j < paths.length; j++) {
-                                        if (!unavailablePathsId.has(paths[j].getAttribute("id"))) {
-                                            paths[j].classList.add("hide");
+                                        cards[i].setAttribute("number", "0");
+                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
+                                            if (playerTrainCard[k]["color"] === "locomotive" && lengthPath !== 0) {
+                                                playerTrainCard.splice(k, 1);
+                                                lengthPath--;
+                                            }
                                         }
+                                        cardLocomotive.setAttribute("number", String(countLocomotive - (lengthPath - countCardsSameColor)));
                                     }
-                                })
-                            }
+                                } else {
+                                    if (lengthPath <= countCardsSameColor) {
+                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
+                                            if (playerTrainCard[k]["color"] === colorWagon && lengthPath !== 0) {
+                                                playerTrainCard.splice(k, 1);
+                                                lengthPath--;
+                                            }
+                                        }
+                                        cards[i].setAttribute("number", String(countCardsSameColor - lengthPath));
+                                    } else {
+                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
+                                            if (playerTrainCard[k]["color"] === colorWagon) {
+                                                playerTrainCard.splice(k, 1);
+                                                lengthPath--;
+                                            }
+                                        }
+                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
+                                            if (playerTrainCard[k]["color"] === "locomotive" && lengthPath !== 0) {
+                                                playerTrainCard.splice(k, 1);
+                                                lengthPath--;
+                                            }
+                                        }
+                                        cards[i].setAttribute("number", "0");
+                                        cardLocomotive.setAttribute("number", String(countLocomotive - (lengthPath - countCardsSameColor)));
+                                    }
+                                }
+                                availablePath.setAttribute("fill", "purple");
+                                unavailablePathsId.add(availablePath.getAttribute("id"));
+                                availablePath.classList.add("unavailable");
+                                allRailways[Number(availablePath.getAttribute("id")) - 1].player = "purple";
+                                cards[i].classList.remove("selected");
+                                for(let j = 0; j < paths.length; j++) {
+                                    if (!unavailablePathsId.has(paths[j].getAttribute("id"))) {
+                                        paths[j].classList.add("hide");
+                                    }
+                                }
+                                redrawPlayerCards(board.players[board.currentPlayer]);
+                            })
                         }
-                    } else {
-                        colorWagon = cards[i].getAttribute("color");
-                        countWagon = Number(cards[i].getAttribute("number"));
-                        let availablePaths = allRailways.filter(item => !item["locomotive"]);
-                        availablePaths = availablePaths.filter(item => Number(item["length"]) <= countWagon);
-                        availablePaths = availablePaths.filter(item => (item["color"] === colorWagon || item["color"] === "grey"));
-                        let availablePathsId = [];
-                        for (let j = 0; j < availablePaths.length; j++) {
-                            if (!unavailablePathsId.has(availablePaths[j]["id"])) {
-                                availablePathsId.push(availablePaths[j]["id"]);
-                            }
+                    }
+                } else {
+                    colorWagon = cards[i].getAttribute("color");
+                    countWagon = Number(cards[i].getAttribute("number"));
+                    let availablePaths = allRailways.filter(item => !item["locomotive"]);
+                    availablePaths = availablePaths.filter(item => Number(item["length"]) <= countWagon);
+                    availablePaths = availablePaths.filter(item => (item["color"] === colorWagon || item["color"] === "grey"));
+                    let availablePathsId = [];
+                    for (let j = 0; j < availablePaths.length; j++) {
+                        if (!unavailablePathsId.has(availablePaths[j]["id"])) {
+                            availablePathsId.push(availablePaths[j]["id"]);
                         }
-                        for (let j = 0; j < availablePathsId.length; j++) {
-                            if (!unavailablePathsId.has(availablePathsId[j])) {
-                                let availablePath = document.getElementById(availablePathsId[j]);
-                                availablePath.classList.remove("hide");
-                                availablePath.addEventListener("click", function (){
-                                    let lengthPath = allRailways[Number(availablePath.getAttribute("id")) - 1]["length"];
-                                    // for (let k = playerTrainCard.length; k >= 0; k--) {
-                                    //     if (playerTrainCard[k]["color"] === colorWagon) {
-                                    //         for (let l = 0; l < countWagon; l++) {
-                                    //             delete playerTrainCard[k];
-                                    //         }
-                                    //     }
-                                    // }
-                                    cards[i].setAttribute("number", String(countWagon - lengthPath));
-                                    availablePath.setAttribute("fill", "purple");
-                                    unavailablePathsId.add(availablePath.getAttribute("id"));
-                                    availablePath.classList.add("unavailable");
-                                    allRailways[Number(availablePath.getAttribute("id")) - 1].player = "purple";
-                                    cards[i].classList.remove("selected");
-                                    for(let j = 0; j < paths.length; j++) {
-                                        if (!unavailablePathsId.has(paths[j].getAttribute("id"))) {
-                                            paths[j].classList.add("hide");
-                                        }
+                    }
+                    for (let j = 0; j < availablePathsId.length; j++) {
+                        if (!unavailablePathsId.has(availablePathsId[j])) {
+                            let availablePath = document.getElementById(availablePathsId[j]);
+                            //console.log(availablePath);
+                            availablePath.classList.remove("hide");
+                            availablePath.addEventListener("click", function (){
+                                let lengthPath = allRailways[Number(availablePath.getAttribute("id")) - 1]["length"];
+                                for (let k = playerTrainCard.length-1; k >= 0; k--) {
+                                    if (playerTrainCard[k]["color"] === colorWagon && lengthPath !== 0) {
+                                        playerTrainCard.splice(k, 1);
+                                        lengthPath--;
                                     }
-                                    // redrawPlayerCards();
-                                })
-                            }
+                                }
+                                cards[i].setAttribute("number", String(countWagon - lengthPath));
+                                availablePath.setAttribute("fill", "purple");
+                                unavailablePathsId.add(availablePath.getAttribute("id"));
+                                availablePath.classList.add("unavailable");
+                                allRailways[Number(availablePath.getAttribute("id")) - 1].player = "purple";
+                                cards[i].classList.remove("selected");
+                                for(let j = 0; j < paths.length; j++) {
+                                    if (!unavailablePathsId.has(paths[j].getAttribute("id"))) {
+                                        paths[j].classList.add("hide");
+                                    }
+                                }
+                                redrawPlayerCards(board.players[board.currentPlayer]);
+                            })
                         }
                     }
                 }
-            } else {
+            }
+            else {
                 cards[i].classList.remove("selected");
                 for(let j = 0; j < paths.length; j++) {
                     if (!unavailablePathsId.has(paths[j].getAttribute("id"))) {
