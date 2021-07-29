@@ -19,6 +19,7 @@ function createRoom() {
     let board = new Board();
     board.start([hostName]);
     firebase.database().ref('rooms/' + roomName).set({
+        currentPlayer: 0,
         gameStarted: 0,
         playersNum: 1,
         maxPlayersNum: maxPlayersNum ,
@@ -102,7 +103,7 @@ function joinRoom() {
                 trains: data.board.trains,
                 tickets: data.board.tickets,
             });
-            let newPlayer = firebase.database().ref('rooms/' + room + '/players').push();
+            let newPlayer = firebase.database().ref('rooms/' + room + '/players/' + data.playersNum);
             newPlayer.set({
                 name: newUser,
                 trainCards: newUserCards,
@@ -116,14 +117,20 @@ function joinRoom() {
 let data;
 function startGame() {
     let startFlag = 0;
+    let meIndex = 0;
+    let moveType = "";
+    let moveEndFlag = 0;
+    let takenCards = 0;
+    let moveContinue = 0;
+    let move;
+    let board;
     let name = document.getElementById("hostName").value;
     firebase.database().ref('rooms/' + room).on('value', function(snapshot){
         data = snapshot.val();
+        console.log(data);
         if (data.gameStarted == 1 && !startFlag) {
             startFlag = 1;
-            let board = new Board();
-
-            let meIndex = 0;
+            board = new Board();
             let meFlag = 0;
             for(let [k, v] of Object.entries(data.players)) {
                 if (v.name !== name && !meFlag) {
@@ -135,14 +142,12 @@ function startGame() {
                 let player = new Player(v.name);
                 player.playerTrainCards = v.trainCards;
                 player.playerTicketCards = v.tickets;
+                player.id = k;
                 board.players.push(player);
-                console.log(player);
             }
             board.trains = data.board.trains;
             board.tickets = data.board.tickets;
             board.visibleCards = data.board.visibleCards;
-            console.log(data);
-            console.log(board);
             let game = document.getElementById("gameMain");
             game.classList.remove("hide");
             let menu = document.getElementById("menu");
@@ -152,6 +157,106 @@ function startGame() {
             drawRightDecks(board);
             drawTicketChoice(board);
             drawPlayerTickets(board.players[meIndex]);
+        }
+        if (data.gameStarted == 1) {
+            if (meIndex == data.currentPlayer && moveEndFlag == 0 && !moveContinue) {
+                alert("Your turn");
+                document.addEventListener("click", function clicked(e) {
+                    console.log("click");
+                    if (e.target && e.target.classList.contains("visibleCards")) {
+                        console.log(takenCards, moveType);
+                        if ((moveType == "takeVisibleCard" || moveType == "" || moveType == "takeDeckCard") && takenCards < 2) {
+                            if (takenCards == 1 && e.target.getAttribute("color") == "locomotive") {
+                                alert("You can't take locomotive now");
+                            }
+                            else {
+                                moveContinue = 1;
+                                takenCards++;
+                                if (takenCards == 2) {
+                                    moveEndFlag = 1;
+                                }
+                                moveType = "takeVisibleCard";
+                                let color = takeVisibleCards(board, e.target, meIndex);
+                                if (e.target.getAttribute("color") == "locomotive") {
+                                    takenCards = 2;
+                                    moveEndFlag = 1;
+                                }
+
+                                let newMove = firebase.database().ref('rooms/' + room + '/players/' + board.players[data.currentPlayer].id +
+                                    '/move');
+                                newMove.set({
+                                    moveType: "takeVisibleCard",
+                                    cardIndex: e.target.getAttribute("index"),
+                                    newCard: color,
+                                });
+                                firebase.database().ref('rooms/'+room+'/board/visibleCards/'+e.target.getAttribute("index")).update({
+                                    color: color,
+                                });
+                                firebase.database().ref('rooms/'+room+'/board/trains/').update({
+                                    cards: data.board.trains.cards.slice(1),
+                                });
+                                firebase.database().ref('rooms/'+room+'/players/'+board.players[data.currentPlayer].id).update({
+                                    trainCards: board.players[data.currentPlayer].playerTrainCards,
+                                });
+                            }
+                        }
+                    }
+                    if (e.target && e.target.classList.contains("takeCardsDeck")) {
+                        if((moveType == "takeDeckCard" || moveType == "" || moveType == "takeVisibleCard") && takenCards < 2) {
+                            moveContinue = 1;
+                            moveType = "takeDeckCard";
+                            takenCards++;
+                            if (takenCards == 2) {
+                                moveEndFlag = 1;
+                            }
+                            takeTrainCards(board, e.target, meIndex);
+                            let newMove = firebase.database().ref('rooms/' + room + '/players/' + board.players[data.currentPlayer].id +
+                                '/move');
+                            newMove.set({
+                                moveType: "takeDeckCard",
+                            });
+                            firebase.database().ref('rooms/'+room+'/board/trains/').update({
+                                cards: data.board.trains.cards.slice(1),
+                            });
+                            firebase.database().ref('rooms/'+room+'/players/'+board.players[data.currentPlayer].id).update({
+                                trainCards: board.players[data.currentPlayer].playerTrainCards,
+                            });
+                        }
+                    }
+                },);
+            }
+
+            if(data.gameStarted == 1 && meIndex != data.currentPlayer) {
+                board.update(data);
+                redrawCurrentPlayer(board, data.currentPlayer);
+                firebase.database().ref('rooms/'+room+'/players/'+data.currentPlayer+'/move/').get().then((snapshot) => {
+                    move = snapshot.val();
+                    if (move != null && move.moveType == "takeDeckCard") {
+                        removeTopCardDeck(data.currentPlayer);
+                    }
+                    if (move != null && move.moveType == "takeVisibleCard") {
+                        removeVisibleCard(data.currentPlayer, move.cardIndex, move.newCard);
+                    }
+                })
+            }
+            console.log(moveEndFlag);
+            if (moveEndFlag == 1) {
+                document.removeEventListener("click", clicked);
+                moveType = "";
+                moveEndFlag = 0;
+                takenCards = 0;
+                moveContinue = 0;
+                let currentPlayer = data.currentPlayer;
+                if (currentPlayer == data.playersNum-1) {
+                    currentPlayer = 0;
+                }
+                else {
+                    currentPlayer++;
+                }
+                firebase.database().ref('rooms'+room).update({
+                    currentPlayer: currentPlayer,
+                });
+            }
         }
     });
 }
