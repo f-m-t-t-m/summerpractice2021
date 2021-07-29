@@ -2,9 +2,148 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Ticket to ride</title>
 </head>
 <style>
+    @font-face {
+        font-family: 'VAG World Bold';
+        src: url('fonts/vag_world_bold.eot'); /* IE 9 Compatibility Mode */
+        src: url('fonts/vag_world_bold.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+        url('fonts/vag_world_bold.woff2') format('woff2'), /* Super Modern Browsers */
+        url('fonts/vag_world_bold.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+        url('fonts/vag_world_bold.ttf') format('truetype'), /* Safari, Android, iOS */
+        url('fonts/vag_world_bold.svg#vag_world_bold') format('svg'); /* Chrome < 4, Legacy iOS */
+    }
+    body{
+        padding: 0;
+        margin: 0 auto;
+        width: 100%;
+        height: 100%;
+        background-image: url("img/fon.jpg");
+        background-size: cover;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+    .menu{
+        margin-top: 20%;
+        margin-left: 16%;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 300px;
+        height: 250px;
+        text-align: center;
+    }
+    .button {
+        font-family: 'VAG World Bold', Arial, sans-serif;
+        font-size: 18px;
+        display: inline-block;
+        font-weight: bold;
+        cursor: pointer;
+        color: #fff;
+        text-decoration: none;
+        text-shadow: 0 -1px rgba(0,0,0,.5);
+        user-select: none;
+        padding: 5px;
+        border: 1px solid rgb(80,32,0);
+        border-radius: 5px;
+        outline: none;
+        background: rgb(147,80,36) linear-gradient(rgb(106,58,26), rgb(147,80,36) 80%);
+        box-shadow:
+                0 6px rgb(86,38,6),
+                0 3px 15px rgba(0,0,0,.4),
+                inset 0 1px rgba(255,255,255,.3),
+                inset 0 0 3px rgba(255,255,255,.5);
+        transition: .2s;
+    }
+    .button a{
+        text-decoration: none;
+        color: white;
+    }
+    .button:hover {
+        background: rgb(167,91,41) linear-gradient(rgb(126,69,31), rgb(167,91,41) 80%);
+    }
+    .button:active {
+        background: rgb(120,63,25) linear-gradient(rgb(120,63,25) 20%, rgb(167,91,41));
+        box-shadow:
+                0 2px rgb(86,38,6),
+                0 1px 6px rgba(0,0,0,.4),
+                inset 0 1px rgba(255,255,255,.3),
+                inset 0 0 3px rgba(255,255,255,.5);
+        -webkit-transform: translate(0, 4px);
+        transform: translate(0, 4px);
+    }
+    h3{
+        font-family: 'VAG World Bold', Arial, sans-serif;
+        font-size: 22px;
+        color: #d13f21;
+
+    }
+    .input {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 4px;
+        margin: 5px 0;
+        opacity: 0.85;
+        display: inline-block;
+        font-size: 17px;
+        line-height: 20px;
+        text-decoration: none; /* remove underline from anchors */
+    }
+    .input:hover{
+        opacity: 1;
+    }
+    table {
+        width: 100%;
+        height: 100%;
+        margin-bottom: 10px;
+        border: 15px solid #F2F8F8;
+        border-top: 5px solid #F2F8F8;
+        border-collapse: collapse;
+        border-radius: 5px;
+    }
+    th {
+        font-weight: bold;
+        padding: 5px;
+        background: #F2F8F8;
+        border: none;
+        border-bottom: 5px solid #F2F8F8;
+    }
+    td {
+        font-size: 14px;
+        font-family: 'VAG World Bold', Arial, sans-serif;
+        background: white;
+        padding: 5px;
+        border: none;
+        border-bottom: 5px solid #F2F8F8;
+        cursor: pointer;
+    }
+    .list{
+        margin-top: 20%;
+        margin-left: 16%;
+        padding: 8px;
+        width: 300px;
+        height: 800px;
+        display: flex;
+        order: 1;
+        flex-direction: column;
+        /*justify-content: space-between;*/
+        text-align: center;
+    }
+    .list_table{
+        height: 450px;
+        margin-bottom: 10px;
+    }
+    .list_button{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+    }
     .chosen {
         background: forestgreen;
     }
@@ -15,10 +154,10 @@
         box-sizing: border-box;
     }
 
-    body {
-        min-height: 100vh;
-        display: flex;
-    }
+    /*body {*/
+    /*    min-height: 100vh;*/
+    /*    display: flex;*/
+    /*}*/
 
     .cardNumber {
         stroke: #000000;
@@ -130,25 +269,45 @@
 <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
 
+<div class="menu">
+    <button class="button " onclick="playGame()">Играть</button>
+    <button class="button "><a href="rules.html">Правила игры</a> </button>
+</div>
+
+<div class="menu hide">
+    <button class="button" onclick="openMenuCreateRoom()">Создать игру</button>
+    <button class="button" onclick="openListPlayers()">Присоединиться</button>
+    <button class="button" onclick="toBack()">Назад</button>
+</div>
+
 <div id="menu">
-    <p>Создание комнаты</p>
-    <input type="text" placeholder="Your name" id="hostName"> <br>
-    <input type="text" placeholder="Room name" id="roomName"> <br>
-    <input type="text" min="2" max="4" placeholder="Maximum Players" id="maxPlayersNum"><br>
-    <button type="button" id="create" onclick="createRoom()">Create room</button>
-
-    <br>
-    <br>
-    <table border="1" id="table">
-        <tr><td>Список комнат</td></tr>
-    </table>
-
-    <button type="button" id="join">Join room</button>
-    <div id="players">
-
+    <div class="menu hide" style="height: 400px; margin-top: 17%;">
+        <h3>Создание комнаты</h3>
+        <input class="input" type="text" placeholder="Your name" id="hostName"> <br>
+        <input class="input" type="text" placeholder="Room name" id="roomName"> <br>
+        <input class="input" type="text" min="2" max="4" placeholder="Maximum Players" id="maxPlayersNum"><br>
+        <button class="button" type="button" id="create" onclick="createRoom()" style="margin-bottom: 10px;">Create room</button>
+        <button class="button" onclick="toBack()">Назад</button>
     </div>
 
-    <button id="play">Играть</button>
+    <div class="list hide" style=" height: 300px; margin-top: 17%;">
+        <div class="list_table">
+            <table border="1" id="table">
+                <tr>
+                    <td>Список комнат</td>
+                    <td>Игроки</td>
+                </tr>
+            </table>
+        </div>
+        <div class="list_button" >
+            <button class="button" type="button" id="join" style="margin-bottom: 10px;">Join room</button>
+            <div id="players">
+            </div>
+            <button class="button" id="play" style="margin-bottom: 10px;">Играть</button>
+            <button class="button" onclick="toBack()">Назад</button>
+        </div>
+    </div>
+
 </div>
 <div id="gameMain" class="hide">
     <svg id="game" width="100%" height="100vh" fill="none" style="position: absolute; z-index: 1;"></svg>

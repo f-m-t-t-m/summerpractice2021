@@ -261,5 +261,39 @@ function startGame() {
     });
 }
 
+function playGame() {
+    let menu = document.getElementsByClassName("menu");
+    menu[0].classList.add("hide");
+    menu[1].classList.remove("hide");
+}
+
+function openMenuCreateRoom() {
+    let menu = document.getElementsByClassName("menu");
+    menu[1].classList.add("hide");
+    menu[2].classList.remove("hide");
+}
+
+function openListPlayers(){
+    let menu = document.getElementsByClassName("menu");
+    menu[1].classList.add("hide");
+    document.getElementsByClassName("list")[0].classList.remove("hide");
+}
+
+function toBack() {
+    let menu = document.getElementsByClassName("menu");
+    if (!menu[1].classList.contains("hide")) {
+        menu[1].classList.add("hide");
+        menu[0].classList.remove("hide");
+    }
+    if (!menu[2].classList.contains("hide")) {
+        menu[2].classList.add("hide");
+        menu[1].classList.remove("hide");
+    }
+    if (!document.getElementsByClassName("list")[0].classList.contains("hide")) {
+        document.getElementsByClassName("list")[0].classList.add("hide");
+        menu[1].classList.remove("hide");
+    }
+}
+
 getRooms();
 
