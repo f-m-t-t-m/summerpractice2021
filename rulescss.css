@@ -1,0 +1,128 @@
+@font-face {
+    font-family: 'VAG World Bold';
+    src: url('fonts/vag_world_bold.eot'); /* IE 9 Compatibility Mode */
+    src: url('fonts/vag_world_bold.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+    url('fonts/vag_world_bold.woff2') format('woff2'), /* Super Modern Browsers */
+    url('fonts/vag_world_bold.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+    url('fonts/vag_world_bold.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('fonts/vag_world_bold.svg#vag_world_bold') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+body{
+    background-image: url("images_for_rules/fon.jpg");
+    /*background-repeat: no-repeat;*/
+    background-attachment: fixed;
+    background-size: 100%;
+    margin: 0 auto;
+    padding: 0;
+    width: 75%;
+}
+.rules{
+    text-align: justify;
+}
+.name_rule{
+    text-align: center;
+    font-family: 'VAG World Bold', Arial, sans-serif;
+    font-size: 24px;
+    color: #d13f21;
+}
+.text_rule{
+    font-size: 18px;
+    font-family: Calibri, sans-serif;
+}
+span{
+    color: #d13f21;
+}
+img{
+    margin: 8px;
+}
+.wagon{
+    float: right;
+    width: 150px;
+}
+.path{
+    float: left;
+    width: 150px;
+
+}
+.peregon{
+    float: left;
+    height: 400px;
+}
+.peregon2{
+    float: right;
+    height: 400px;
+}
+.peregon3{
+    width: 100px;
+}
+.peregons{
+    display: flex;
+    flex-direction: column;
+    float: right;
+}
+.parom{
+    width: 100px;
+    float: left;
+}
+.end{
+    width: 100px;
+    float: left;
+}
+.cost{
+    width: 300px;
+    float: right;
+    border-radius: 15px;
+}
+.quote {
+    background: #f5f5dc;
+    font-style: italic;
+    margin: 1em 1em 1.5em 1em;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    border-left: 15px solid #f2ddc6;
+    box-shadow: 11px 10px 0 #eee;
+}
+.back {
+    position: fixed;
+    top: 90%;
+    left: 90%;
+    width: 80px;
+    font-family: 'VAG World Bold', Arial, sans-serif;
+    font-size: 18px;
+    display: inline-block;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 -1px rgba(0,0,0,.5);
+    user-select: none;
+    padding: 5px;
+    border: 1px solid rgb(80,32,0);
+    border-radius: 5px;
+    outline: none;
+    background: rgb(147,80,36) linear-gradient(rgb(106,58,26), rgb(147,80,36) 80%);
+    box-shadow:
+            0 6px rgb(86,38,6),
+            0 3px 15px rgba(0,0,0,.4),
+            inset 0 1px rgba(255,255,255,.3),
+            inset 0 0 3px rgba(255,255,255,.5);
+    transition: .2s;
+}
+.back a{
+    text-decoration: none;
+    color: white;
+}
+.back:hover {
+    background: rgb(167,91,41) linear-gradient(rgb(126,69,31), rgb(167,91,41) 80%);
+}
+.back:active {
+    background: rgb(120,63,25) linear-gradient(rgb(120,63,25) 20%, rgb(167,91,41));
+    box-shadow:
+            0 2px rgb(86,38,6),
+            0 1px 6px rgba(0,0,0,.4),
+            inset 0 1px rgba(255,255,255,.3),
+            inset 0 0 3px rgba(255,255,255,.5);
+    -webkit-transform: translate(0, 4px);
+    transform: translate(0, 4px);
+}

@@ -1,20 +1,13 @@
-let game = document.getElementById("game");
-let rect = game.getBoundingClientRect();
-
-const cardWidth = 90;
-const cardHeight = 90*474/292;
-
-const mapWidth = rect.width/1.6;
-const mapHeight = mapWidth*2301/3578;
-
-
-game.addEventListener("click", function (e) {
-    console.log(e.clientX, e.clientY);
-});
-
-let unavailablePathsId = new Set();
-
 function drawPlayerHand(player) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
+
     let playerTrainCardsDict = {};
     let uniqueCardsLen = 0;
     for (let i = 0; i < player.playerTrainCards.length; i++) {
@@ -52,198 +45,18 @@ function drawPlayerHand(player) {
     }
     playerCards.setAttribute("class", "playerCards");
     game.appendChild(playerCards);
-
-    drawPlayersPath();
-}
-
-function drawPlayersPath() {
-    let paths = document.getElementsByClassName("railway");
-    let cards = document.getElementsByClassName("card");
-    let checkLocomotive = false, countLocomotive = 0, cardLocomotive;
-    for (let i = 0; i < cards.length; i++) {
-        if (cards[i].getAttribute("color") === "locomotive") {
-            cardLocomotive = cards[i];
-            checkLocomotive = true;
-            countLocomotive = cards[i].getAttribute("number");
-            break;
-        }
-    }
-    let allRailways = board.railways;
-    let railwaysWithLocomotive = allRailways.filter(item => item["locomotive"] === 1);
-    let railwaysWithLocomotiveId = [];
-    for (let i = 0; i < railwaysWithLocomotive.length; i++) {
-        railwaysWithLocomotiveId.push(railwaysWithLocomotive[i]["id"]);
-    }
-    for (let i = 0; i < cards.length; i++) {
-        cards[i].addEventListener("click", function (){
-            let playerTrainCard = board.players[0]["playerTrainCards"];
-            if (!cards[i].classList.contains("selected")) {
-                for (let j = 0; j < cards.length; j++) {
-                    if (cards[j].getAttribute("color") === "locomotive") {
-                        cardLocomotive = cards[j];
-                        checkLocomotive = true;
-                        countLocomotive = cards[j].getAttribute("number");
-                        break;
-                    }
-                }
-                for (let j = 0; j < cards.length; j++) {
-                    cards[j].classList.remove("selected");
-                }
-                cards[i].classList.add("selected");
-                let colorWagon, countWagon;
-                console.log(unavailablePathsId);
-                for(let j = 0; j < paths.length; j++) {
-                    if (!unavailablePathsId.has(paths[j].getAttribute("id"))) {
-                        paths[j].classList.add("hide");
-                    }
-                }
-                if (checkLocomotive) {
-                    colorWagon = cards[i].getAttribute("color");
-                    countWagon = Number(cards[i].getAttribute("number")) + Number(countLocomotive);
-                    let countCardsSameColor = Number(cards[i].getAttribute("number"));
-                    let availablePaths = allRailways.filter(item => Number(item["length"]) <= countWagon);
-                    availablePaths = availablePaths.filter(item => (item["color"] === colorWagon || item["color"] === "grey"));
-                    let availablePathsId = [];
-                    for (let j = 0; j < availablePaths.length; j++) {
-                        if (!unavailablePathsId.has(String(availablePaths[j]["id"]))) {
-                            availablePathsId.push(availablePaths[j]["id"]);
-                        }
-                    }
-                    for (let j = 0; j < availablePathsId.length; j++) {
-                        if (!unavailablePathsId.has(availablePathsId[j])) {
-                            let availablePath = document.getElementById(availablePathsId[j]);
-                            availablePath.classList.remove("hide");
-                            availablePath.addEventListener("click", function (){
-                                let lengthPath = allRailways[Number(availablePath.getAttribute("id")) - 1]["length"];
-                                if (railwaysWithLocomotiveId.includes(Number(availablePath.getAttribute("id")))) {
-                                    for (let k = playerTrainCard.length-1; k >= 0; k--) {
-                                        if (playerTrainCard[k]["color"] === "locomotive") {
-                                            playerTrainCard.splice(k, 1);
-                                            break;
-                                        }
-                                    }
-                                    lengthPath--;
-                                    cardLocomotive.setAttribute("number", String(countLocomotive - 1));
-                                    if (lengthPath <= countCardsSameColor) {
-                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
-                                            if (playerTrainCard[k]["color"] === colorWagon && lengthPath !== 0) {
-                                                playerTrainCard.splice(k, 1);
-                                                lengthPath--;
-                                            }
-                                        }
-                                        cards[i].setAttribute("number", String(countCardsSameColor - lengthPath));
-                                    } else {
-                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
-                                            if (playerTrainCard[k]["color"] === colorWagon) {
-                                                playerTrainCard.splice(k, 1);
-                                                lengthPath--;
-                                            }
-                                        }
-                                        cards[i].setAttribute("number", "0");
-                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
-                                            if (playerTrainCard[k]["color"] === "locomotive" && lengthPath !== 0) {
-                                                playerTrainCard.splice(k, 1);
-                                                lengthPath--;
-                                            }
-                                        }
-                                        cardLocomotive.setAttribute("number", String(countLocomotive - (lengthPath - countCardsSameColor)));
-                                    }
-                                } else {
-                                    if (lengthPath <= countCardsSameColor) {
-                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
-                                            if (playerTrainCard[k]["color"] === colorWagon && lengthPath !== 0) {
-                                                playerTrainCard.splice(k, 1);
-                                                lengthPath--;
-                                            }
-                                        }
-                                        cards[i].setAttribute("number", String(countCardsSameColor - lengthPath));
-                                    } else {
-                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
-                                            if (playerTrainCard[k]["color"] === colorWagon) {
-                                                playerTrainCard.splice(k, 1);
-                                                lengthPath--;
-                                            }
-                                        }
-                                        for (let k = playerTrainCard.length-1; k >= 0; k--) {
-                                            if (playerTrainCard[k]["color"] === "locomotive" && lengthPath !== 0) {
-                                                playerTrainCard.splice(k, 1);
-                                                lengthPath--;
-                                            }
-                                        }
-                                        cards[i].setAttribute("number", "0");
-                                        cardLocomotive.setAttribute("number", String(countLocomotive - (lengthPath - countCardsSameColor)));
-                                    }
-                                }
-                                availablePath.setAttribute("fill", "purple");
-                                unavailablePathsId.add(availablePath.getAttribute("id"));
-                                availablePath.classList.add("unavailable");
-                                allRailways[Number(availablePath.getAttribute("id")) - 1].player = "purple";
-                                cards[i].classList.remove("selected");
-                                for(let j = 0; j < paths.length; j++) {
-                                    if (!unavailablePathsId.has(paths[j].getAttribute("id"))) {
-                                        paths[j].classList.add("hide");
-                                    }
-                                }
-                                redrawPlayerCards(board.players[board.currentPlayer]);
-                            })
-                        }
-                    }
-                } else {
-                    colorWagon = cards[i].getAttribute("color");
-                    countWagon = Number(cards[i].getAttribute("number"));
-                    let availablePaths = allRailways.filter(item => !item["locomotive"]);
-                    availablePaths = availablePaths.filter(item => Number(item["length"]) <= countWagon);
-                    availablePaths = availablePaths.filter(item => (item["color"] === colorWagon || item["color"] === "grey"));
-                    let availablePathsId = [];
-                    for (let j = 0; j < availablePaths.length; j++) {
-                        if (!unavailablePathsId.has(availablePaths[j]["id"])) {
-                            availablePathsId.push(availablePaths[j]["id"]);
-                        }
-                    }
-                    for (let j = 0; j < availablePathsId.length; j++) {
-                        if (!unavailablePathsId.has(availablePathsId[j])) {
-                            let availablePath = document.getElementById(availablePathsId[j]);
-                            //console.log(availablePath);
-                            availablePath.classList.remove("hide");
-                            availablePath.addEventListener("click", function (){
-                                let lengthPath = allRailways[Number(availablePath.getAttribute("id")) - 1]["length"];
-                                for (let k = playerTrainCard.length-1; k >= 0; k--) {
-                                    if (playerTrainCard[k]["color"] === colorWagon && lengthPath !== 0) {
-                                        playerTrainCard.splice(k, 1);
-                                        lengthPath--;
-                                    }
-                                }
-                                cards[i].setAttribute("number", String(countWagon - lengthPath));
-                                availablePath.setAttribute("fill", "purple");
-                                unavailablePathsId.add(availablePath.getAttribute("id"));
-                                availablePath.classList.add("unavailable");
-                                allRailways[Number(availablePath.getAttribute("id")) - 1].player = "purple";
-                                cards[i].classList.remove("selected");
-                                for(let j = 0; j < paths.length; j++) {
-                                    if (!unavailablePathsId.has(paths[j].getAttribute("id"))) {
-                                        paths[j].classList.add("hide");
-                                    }
-                                }
-                                redrawPlayerCards(board.players[board.currentPlayer]);
-                            })
-                        }
-                    }
-                }
-            }
-            else {
-                cards[i].classList.remove("selected");
-                for(let j = 0; j < paths.length; j++) {
-                    if (!unavailablePathsId.has(paths[j].getAttribute("id"))) {
-                        paths[j].classList.add("hide");
-                    }
-                }
-            }
-        })
-    }
 }
 
 let g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-function drawRightDecks() {
+function drawRightDecks(board) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     for(let i = 0; i < board.trains.cards.length; i++) {
         let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
         image.setAttributeNS(null, "href", "img/wagons/reverse_side.png");
@@ -254,7 +67,7 @@ function drawRightDecks() {
         image.setAttribute("class", "rightPanel");
         image.setAttribute("transform", "rotate(-90)")
         image.classList.add("takeCardsDeck");
-        addAnimation(image, cardHeight);
+        addAnimation(image, -rect.width/2 + cardWidth + 90,cardHeight);
     }
     for (let i = 0; i < board.tickets.cards.length; i++) {
         let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
@@ -281,16 +94,25 @@ function drawRightDecks() {
         image.setAttribute("color", trainColor);
         image.setAttribute("transform", "rotate(-90)")
         image.setAttribute("index", i);
-        addAnimation(image, cardHeight+i*cardWidth+cardWidth+20);
-        image.classList.add("visibleCards")
-        g.appendChild(image)
+        addAnimation(image, -rect.width/2 + cardWidth + 90,cardHeight+i*cardWidth+cardWidth+20);
+        image.classList.add("visibleCards");
+        image.classList.add("startVisibleCards");
+        g.appendChild(image);
     }
 
     g.setAttribute("transform", "translate(-90 -45)");
     game.appendChild(g);
 }
 
-function addAnimation(image, yPos=0, xFrom=0, yFrom=0) {
+function addAnimation(image, xTo=0, yTo=0, xFrom=0, yFrom=0) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     let animation = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
     animation.setAttribute("attributeName", "transform");
     animation.setAttribute("type", "translate");
@@ -298,7 +120,7 @@ function addAnimation(image, yPos=0, xFrom=0, yFrom=0) {
     animation.setAttribute("begin", "indefinite");
     animation.setAttribute("repeatCount", "1");
     animation.setAttribute("from", `${xFrom}, ${yFrom}`);
-    animation.setAttribute("to", `${-rect.width/2 + cardWidth + 90}, ${yPos}`);
+    animation.setAttribute("to", `${xTo}, ${yTo}`);
     animation.setAttribute("class", `deckAnimation`);
     animation.setAttribute("fill", `freeze`);
     image.appendChild(animation);
@@ -331,35 +153,26 @@ function addAnimation(image, yPos=0, xFrom=0, yFrom=0) {
     g.appendChild(image);
 }
 
-// function drawPath() {
-//     let pathes = document.createElementNS("http://www.w3.org/2000/svg", "g");
-//     let map = document.getElementsByClassName("map")[0];
-//     let path = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
-//     path.setAttribute("points", `325, 277, 500, 125`);
-//     path.classList.add("path");
-//     pathes.appendChild(path);
-//     game.appendChild(pathes);
-// }
+function drawTicketChoice(board) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
 
-// function drawMap() {
-//     let centerX = rect.width/2;
-//     let centerY = rect.height/2;
-//     let x = centerX - mapWidth/2;
-//     let y = centerY - mapHeight/2-40;
-//     let map = document.createElementNS("http://www.w3.org/2000/svg", "image");
-//     map.setAttributeNS(null, "href", `img/map.jpg`);
-//     map.setAttribute("width", mapWidth)
-//     map.setAttribute("height", mapHeight);
-//     map.setAttribute("x", x);
-//     map.setAttribute("y", y);
-//     map.setAttribute("class", "map");
-//     game.appendChild(map);
-// }
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
 
-function drawTicketChoice() {
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
+
+    let visibleCards = document.getElementsByClassName("visibleCards");
+    for (let i = 0; i < visibleCards.length; i++) {
+        visibleCards[i].classList.add("hide");
+    }
+
     let tickets = document.createElementNS("http://www.w3.org/2000/svg", "g");
     tickets.classList.add("ticketList")
-    let ticketNum = Math.min(3, board.tickets.cards.length);
+
+    let tickLen = board.tickets.cards.length;
+    let ticketNum = Math.min(3, tickLen);
     let ticketCards = board.tickets.cards.splice(0, 3);
     for (let i = 0; i < ticketNum; i++) {
         let ticket = ticketCards[i];
@@ -375,9 +188,8 @@ function drawTicketChoice() {
         image.setAttribute("cost", `${ticket.cost}`);
         image.setAttribute("index", i);
         image.setAttribute("transform", "rotate(90)")
-        addAnimation(image, cardHeight+i*cardWidth+cardWidth+20);
+        //addAnimation(image, cardHeight+i*cardWidth+cardWidth+20);
         image.classList.add("ticketCards");
-        image.classList.add("hide");
         tickets.appendChild(image)
     }
     let btnContainer = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -392,11 +204,9 @@ function drawTicketChoice() {
     btn.setAttributeNS(null, 'ty', 15);
     btn.setAttributeNS(null, 'fill', 'green');
     btn.classList.add("btnRect");
-    btn.classList.add("hide");
     let btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
     btnText.appendChild(textNode);
     btnText.classList.add("btn");
-    btnText.classList.add("hide");
     btnText.setAttributeNS(null, 'x', rect.width-140);
     btnText.setAttributeNS(null, 'y', rect.height+22);
 
@@ -408,8 +218,16 @@ function drawTicketChoice() {
     return ticketCards;
 }
 
-function drawPlayerTickets(player) {
-    let tickets = player.playerTicketCards;
+function drawPlayerTickets(board, meIndex) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
+    let tickets = board.players[meIndex].playerTicketCards;
     for(let i = tickets.length-1; i >= 0; i--) {
         let image = document.createElementNS("http://www.w3.org/2000/svg", "image");
         image.setAttributeNS(null, "href", `img/railways/${tickets[i].cities[0]}-${tickets[i].cities[1]}.jpg`);
@@ -424,17 +242,21 @@ function drawPlayerTickets(player) {
     }
 }
 
-function takeTrainCards(board, target) {
-    let takenCardsNum = 0;
-    let locomotiveFlag = 0;
+function takeTrainCards(board, target, meIndex) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     let deck = document.getElementsByClassName("takeCardsDeck");
     let visibleCards = document.getElementsByClassName("visibleCards")
     let playerCards = document.getElementsByClassName("card");
-    // if (takenCardsNum == 2 || locomotiveFlag) {
-    //     return;
-    // }
+
     let trainColor = board.trains.cards[0].color;
-    board.players[board.currentPlayer].playerTrainCards.push(board.trains.cards.shift());
+    board.players[meIndex].playerTrainCards.push(board.trains.cards.shift());
     target.setAttributeNS(null, "href", `img/wagons/${trainColor}.png`)
     let animation = target.getElementsByClassName("deckAnimation");
     let rotAnimation = target.getElementsByClassName("rotAnimation")
@@ -442,24 +264,26 @@ function takeTrainCards(board, target) {
     animation[0].beginElement();
     rotAnimation[0].beginElement();
     scaleAnimation[0].beginElement();
-    takenCardsNum++;
-    redrawPlayerCards();
+    target.classList.remove("takeCardsDeck");
+    redrawPlayerCards(board.players[meIndex]);
 }
 
-function takeVisibleCards(board, target) {
+function takeVisibleCards(board, target, meIndex) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     let takenCardsNum = 0;
     let locomotiveFlag = 0;
     let deck = document.getElementsByClassName("takeCardsDeck");
     let visibleCards = document.getElementsByClassName("visibleCards")
     let playerCards = document.getElementsByClassName("card");
-    // if (takenCardsNum == 2 || locomotiveFlag) {
-    //     return;
-    // }
 
     let trainColor = target.getAttribute("color");
-    // if (takenCardsNum > 0 && trainColor == "locomotive") {
-    //     return;
-    // }
     let x = target.getAttribute("x");
     let y = target.getAttribute("y");
     let newCard = document.createElementNS("http://www.w3.org/2000/svg", "image");
@@ -480,7 +304,8 @@ function takeVisibleCards(board, target) {
     newCard.setAttribute("color", newCardColor);
     newCard.setAttribute("transform", "rotate(-90)")
     newCard.setAttribute("index", index);
-    addAnimation(newCard, cardHeight, 0, -index*cardWidth - cardWidth-20);
+    addAnimation(newCard, -rect.width/2 + cardWidth + 90, cardHeight, 0, -index*cardWidth - cardWidth-20);
+
     let topDeckAnimation = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
     topDeckAnimation.setAttribute("attributeName", "transform");
     topDeckAnimation.setAttribute("type", "translate");
@@ -514,7 +339,7 @@ function takeVisibleCards(board, target) {
     //     locomotiveFlag = 1;
     // }
     let train = new trainCard(trainColor);
-    board.players[board.currentPlayer].playerTrainCards.push(train);
+    board.players[meIndex].playerTrainCards.push(train);
     let moveAnimation = target.getElementsByClassName("deckAnimation");
     let rotAnimation = target.getElementsByClassName("rotAnimation")
     let scaleAnimation = target.getElementsByClassName("scaleAnimation")
@@ -525,23 +350,34 @@ function takeVisibleCards(board, target) {
         topDeckAnimation.beginElement();
         topDeckAnimationRotate.beginElement();
     }, 50)
+    setTimeout(function() {
+        target.parentNode.removeChild(target)
+        }, 1000) ;
     board.visibleCards[index] = newTrainCard;
     takenCardsNum++;
     deck[deck.length-1].remove();
-    redrawPlayerCards();
+    redrawPlayerCards(board.players[meIndex]);
+    return newCardColor;
 }
 
-function takeTickets(board) {
-    let ticketsToChoose = drawTicketChoice();
+function takeTickets(board, meIndex, endFlag) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
+    let ticketsToChoose = drawTicketChoice(board);
     let visibleCards = document.getElementsByClassName("visibleCards");
-    let ticketCards = document.getElementsByClassName("ticketCards")
+    let ticketCards = document.getElementsByClassName("ticketCards");
 
     let text = document.getElementsByClassName("btn");
     let textRect = document.getElementsByClassName("btnRect");
     let btn = document.getElementsByClassName("btnContainer");
     let ticketDeck = document.getElementsByClassName("ticketDeck");
     let chosenNum = ticketsToChoose.length;
-    console.log(chosenNum, ticketDeck.length);
     for (let i = 0; i < visibleCards.length; i++) {
         visibleCards[i].classList.add("hide");
     }
@@ -577,7 +413,7 @@ function takeTickets(board) {
             }
             for (let i = 0; i < ticketCards.length; i++) {
                 if (!ticketCards[i].classList.contains("filter")) {
-                    board.players[board.currentPlayer].playerTicketCards.push(ticketsToChoose[i]);
+                    board.players[meIndex].playerTicketCards.push(ticketsToChoose[i]);
                 } else {
                     board.tickets.cards.push(ticketsToChoose[i]);
                 }
@@ -599,59 +435,282 @@ function takeTickets(board) {
             for(let i = tick.length-1; i >= 0; i--) {
                 tick[i].parentNode.removeChild(tick[i]);
             }
-            drawPlayerTickets(board.players[0]);
+            drawPlayerTickets(board, meIndex);
             this.removeEventListener('click', arguments.callee);
         }
     });
-
 }
 
-function redrawPlayerCards() {
+function redrawPlayerCards(player) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    const mapWidth = rect.width/1.6;
+    const mapHeight = mapWidth*2301/3578;
     let cards = document.getElementsByClassName("card");
     for(let i = cards.length-1; i >= 0; i--) {
         cards[i].parentNode.removeChild(cards[i]);
     }
-    drawPlayerHand(board.players[0]);
+    drawPlayerHand(player);
 }
 
-// drawMap();
-drawPlayerHand(board.players[0]);
+function drawOtherPlayers(board, meIndex) {
+    let game = document.getElementById("game");
+    let otherPlayerIndex = 0;
+    for(let i = 0; i < board.players.length; i++) {
+        if (i != meIndex) {
+            let otherPlayer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            let btn = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 
-drawRightDecks();
-document.addEventListener("click", function (e) {
-    if (e.target && e.target.classList.contains("ticketDeck")) {
-        takeTickets(board);
-    }
-});
-document.addEventListener("click", function (e) {
-    if (e.target && e.target.classList.contains("visibleCards")) {
-        takeVisibleCards(board, e.target);
-    }
-});
-document.addEventListener("click", function (e) {
-    if (e.target && e.target.classList.contains("takeCardsDeck")) {
-        takeTrainCards(board, e.target);
-    }
-});
+            btn.setAttributeNS(null, 'x', 75);
+            btn.setAttributeNS(null, 'y', 10 + 110*otherPlayerIndex);
+            btn.setAttributeNS(null, 'width', 150);
+            btn.setAttributeNS(null, 'height', 90);
+            btn.setAttributeNS(null, 'rx', 5);
+            btn.setAttributeNS(null, 'ty', 5);
+            btn.setAttributeNS(null, 'fill', board.colors[i]);
+            otherPlayer.appendChild(btn);
 
-drawPlayerTickets(board.players[0])
-document.addEventListener("click", function (e) {
-    if (e.target && e.target.classList.contains("playerTicket")) {
-        let index = e.target.getAttribute("index");
-        let tmp = board.players[0].playerTicketCards[index];
-        board.players[0].playerTicketCards[index] = board.players[0].playerTicketCards[0]
-        board.players[0].playerTicketCards[0] = tmp;
-        let tick = document.getElementsByClassName("playerTicket");
-        for(let i = tick.length-1; i >= 0; i--) {
-            tick[i].parentNode.removeChild(tick[i]);
+            let textNode = document.createTextNode(board.players[i].playerName);
+            let btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            btnText.appendChild(textNode);
+            btnText.classList.add("otherPlayerName");
+            btnText.setAttributeNS(null, 'x', 80);
+            btnText.setAttributeNS(null, 'y', 35 + 110*otherPlayerIndex);
+            otherPlayer.appendChild(btnText);
+
+            textNode = document.createTextNode(`Поездов: ${board.players[i].trains}`);
+            btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            btnText.appendChild(textNode);
+            btnText.classList.add("otherPlayerStat");
+            btnText.classList.add("otherPlayerTrains");
+            btnText.setAttributeNS(null, 'x', 80);
+            btnText.setAttributeNS(null, 'y', 65 + 110*otherPlayerIndex);
+            otherPlayer.appendChild(btnText);
+
+            textNode = document.createTextNode(`Карт поездов: ${board.players[i].playerTrainCards.length}`);
+            btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            btnText.appendChild(textNode);
+            btnText.classList.add("otherPlayerStat");
+            btnText.classList.add("otherPlayerCards");
+            btnText.setAttributeNS(null, 'x', 80);
+            btnText.setAttributeNS(null, 'y', 75 + 110*otherPlayerIndex);
+            otherPlayer.appendChild(btnText);
+
+            textNode = document.createTextNode(`Карт маршрутов: ${board.players[i].playerTicketCards.length}`);
+            btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            btnText.appendChild(textNode);
+            btnText.classList.add("otherPlayerStat");
+            btnText.classList.add("otherPlayerTickets");
+            btnText.setAttributeNS(null, 'x', 80);
+            btnText.setAttributeNS(null, 'y', 85 + 110*otherPlayerIndex);
+            otherPlayer.appendChild(btnText);
+
+            otherPlayer.setAttribute("index", i);
+            otherPlayer.classList.add("otherPlayer");
+            game.appendChild(otherPlayer);
+
+            otherPlayerIndex++;
         }
-        drawPlayerTickets(board.players[0]);
     }
+}
+
+function redrawCurrentPlayer(board, currentPlayer) {
+    let otherPlayers = document.getElementsByClassName("otherPlayer");
+    for(let i = 0; i < otherPlayers.length; i++) {
+        if (otherPlayers[i].getAttribute("index") == currentPlayer) {
+            let otherPlayerCards = otherPlayers[i].getElementsByClassName("otherPlayerCards")[0];
+            let otherPlayerTickets = otherPlayers[i].getElementsByClassName("otherPlayerTickets")[0];
+            otherPlayerCards.textContent = `Карт поездов: ${board.players[currentPlayer].playerTrainCards.length}`;
+            otherPlayerTickets.textContent = `Карт маршрутов: ${board.players[currentPlayer].playerTicketCards.length}`;
+        }
+    }
+}
+
+function removeTopCardDeck(currentPlayer) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    let otherPlayers = document.getElementsByClassName("otherPlayer");
+    let index;
+    for(let i = 0; i < otherPlayers.length; i++) {
+        if (otherPlayers[i].getAttribute("index") == currentPlayer) {
+            index = i;
+        }
+    }
+
+    let card = document.getElementsByClassName("takeCardsDeck");
+    card = card[card.length-1];
+    let animation = card.getElementsByClassName("deckAnimation");
+    let rotAnimation = card.getElementsByClassName("rotAnimation")
+    let scaleAnimation = card.getElementsByClassName("scaleAnimation")
+    animation[0].setAttribute("to", `${-rect.width+cardHeight + 225}, ${-rect.height+cardHeight+cardWidth+10+110*index}`);
+    animation[0].beginElement();
+    rotAnimation[0].beginElement();
+    scaleAnimation[0].beginElement();
+}
+
+function removeVisibleCard(currentPlayer, index, newCardColor) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    let otherPlayers = document.getElementsByClassName("otherPlayer");
+    let playerIndex;
+    for(let i = 0; i < otherPlayers.length; i++) {
+        if (otherPlayers[i].getAttribute("index") == currentPlayer) {
+            playerIndex = i;
+        }
+    }
+    let card = document.getElementsByClassName("visibleCards");
+    let cardToDelete;
+    for(let i = 0; i < card.length; i++) {
+        if (card[i].getAttribute("index") == index) {
+            cardToDelete = card[i];
+            break;
+        }
+    }
+    let x = cardToDelete.getAttribute("x");
+    let y = cardToDelete.getAttribute("y");
+    let animation = cardToDelete.getElementsByClassName("deckAnimation");
+    let rotAnimation = cardToDelete.getElementsByClassName("rotAnimation");
+    let scaleAnimation = cardToDelete.getElementsByClassName("scaleAnimation");
+    let yTo;
+    if (cardToDelete.classList.contains("startVisibleCards")) {
+        yTo = -(rect.height - cardHeight - index*cardWidth - 2*cardWidth-20) + (10 + 110 * playerIndex);
+    }
+    else {
+        yTo = -(rect.height - cardHeight - cardWidth) + (10 + 110 * playerIndex);
+    }
+    animation[0].setAttribute("to", `${-rect.width+cardHeight + 225}, ${yTo}`);
+    animation[0].beginElement();
+    rotAnimation[0].beginElement();
+    scaleAnimation[0].beginElement();
+
+    setTimeout(function() {
+        cardToDelete.parentNode.removeChild(cardToDelete);
+    }, 1000) ;
+
+    let deck = document.getElementsByClassName("takeCardsDeck");
+    let newCard = document.createElementNS("http://www.w3.org/2000/svg", "image");
+    let xDeck = deck[deck.length-1].getAttribute("x");
+    let yDeck = deck[deck.length-1].getAttribute("y");
+    let yDeck0 = deck[0].getAttribute("y");
+    let diff = yDeck-yDeck0;
+
+    newCard.setAttributeNS(null, "href", `img/wagons/${newCardColor}.png`);
+    newCard.setAttribute("width", cardWidth)
+    newCard.setAttribute("height", cardHeight);
+    newCard.setAttribute("x", xDeck);
+    newCard.setAttribute("y", yDeck);
+    newCard.setAttribute("class", "rightPanel");
+    newCard.setAttribute("color", newCardColor);
+    newCard.setAttribute("transform", "rotate(-90)")
+    newCard.setAttribute("index", index);
+    addAnimation(newCard, -rect.width/2 + cardWidth + 90, cardHeight, 0, -index*cardWidth - cardWidth-20);
+
+    let topDeckAnimation = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
+    topDeckAnimation.setAttribute("attributeName", "transform");
+    topDeckAnimation.setAttribute("type", "translate");
+    topDeckAnimation.setAttribute("dur", "0.5s");
+    topDeckAnimation.setAttribute("begin", "indefinite");
+    topDeckAnimation.setAttribute("repeatCount", "1");
+    topDeckAnimation.setAttribute("from", `0, 0`);
+    topDeckAnimation.setAttribute("to", `${x-xDeck}, ${-index*cardWidth - cardWidth-20-diff}`);
+    topDeckAnimation.setAttribute("class", `deckAnimation`);
+    topDeckAnimation.setAttribute("fill", `freeze`);
+
+    let topDeckAnimationRotate = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
+    topDeckAnimationRotate.setAttribute("attributeName", "transform");
+    topDeckAnimationRotate.setAttribute("type", "rotate");
+    topDeckAnimationRotate.setAttribute("dur", "1s");
+    topDeckAnimationRotate.setAttribute("begin", "indefinite");
+    topDeckAnimationRotate.setAttribute("repeatCount", "1");
+    topDeckAnimationRotate.setAttribute("to", `-90`);
+    topDeckAnimationRotate.setAttribute("from", `-90`);
+    topDeckAnimationRotate.setAttribute("class", `topDeckAnimationRotate`);
+    topDeckAnimationRotate.setAttribute("fill", `freeze`);
+    topDeckAnimationRotate.setAttribute("additive", `sum`);
+
+    newCard.appendChild(topDeckAnimation);
+    newCard.appendChild(topDeckAnimationRotate);
+    newCard.classList.add("visibleCards");
+    g.appendChild(newCard);
+
+    topDeckAnimation.beginElement();
+    topDeckAnimationRotate.beginElement();
+    deck[deck.length-1].remove();
+}
+
+function removeTicketCards(chosenNum) {
+    let ticketDeck = document.getElementsByClassName("ticketDeck");
+    if (chosenNum == ticketDeck.length) {
+        for(let i = ticketDeck.length-1; i >= 0; i--) {
+            ticketDeck[i].parentNode.removeChild(ticketDeck[i]);
+        }
+    }
+    else {
+        for (let i = 0; i < chosenNum; i++) {
+            ticketDeck[ticketDeck.length - 1 - i].remove();
+        }
+    }
+}
+
+function fillPath(pathId, unavailablePathsId) {
+    let path = document.getElementsByClassName("railway");
+    for(let i = 0; i < path.length; i++) {
+        if (path[i].getAttribute("id") == pathId) {
+            unavailablePathsId.add(path[i].getAttribute("id"));
+            path[i].classList.add("unavailable");
+            path[i].setAttribute("fill", board.colors[data.currentPlayer]);
+            path[i].classList.remove("hide");
+        }
+    }
+}
+
+play = document.getElementById("play");
+play.addEventListener("click", function(){
+    firebase.database().ref('rooms/' + room).update({
+        gameStarted: 1,
+    });
 });
 
-let path = document.getElementsByTagName("path");
-for(let i = 0; i < path.length; i++) {
-    path[i].classList.add("hide");
-    path[i].addEventListener("click",function (){
-    });
+function playGame() {
+    let menu = document.getElementsByClassName("menu");
+    menu[0].classList.add("hide");
+    menu[1].classList.remove("hide");
+}
+
+function openMenuCreateRoom() {
+    let menu = document.getElementsByClassName("menu");
+    menu[1].classList.add("hide");
+    menu[2].classList.remove("hide");
+}
+
+function openListPlayers(){
+    let menu = document.getElementsByClassName("menu");
+    menu[1].classList.add("hide");
+    document.getElementsByClassName("list")[0].classList.remove("hide");
+}
+
+function toBack() {
+    let menu = document.getElementsByClassName("menu");
+    if (!menu[1].classList.contains("hide")) {
+        menu[1].classList.add("hide");
+        menu[0].classList.remove("hide");
+    }
+    if (!menu[2].classList.contains("hide")) {
+        menu[2].classList.add("hide");
+        menu[1].classList.remove("hide");
+    }
+    if (!document.getElementsByClassName("list")[0].classList.contains("hide")) {
+        document.getElementsByClassName("list")[0].classList.add("hide");
+        menu[1].classList.remove("hide");
+    }
 }

@@ -223,7 +223,7 @@ class Player {
         this.playerTicketCards = [];
         this.trains = 45;
         this.playerPts = 0;
-        this.color = "";
+        this.color = "pink";
     }
 
     mulligan() {
@@ -1197,11 +1197,13 @@ class Board {
         ];
         this.trains = [];
         this.currentPlayer = 0;
+        this.colors = ["green", "orange", "red", "blue"];
     }
 
-    start(playerOneName, playerTwoName) {
-        this.players.push(new Player(playerOneName));
-        this.players.push(new Player(playerTwoName));
+    start(players) {
+        for (let i = 0; i < players.length; i++) {
+            this.players.push(new Player(players[i]));
+        }
         this.trains = new trainDeck();
         this.tickets = new ticketDeck();
         this.trains.createDeck();
@@ -1214,13 +1216,15 @@ class Board {
         this.visibleCards = this.trains.cards.splice(0, 5);
     }
 
-}
-
-class Move {
-    takeCards(deck) {
-        this.type = "takeCards";
+    update(data) {
+        let i = 0;
+        for(let [k, v] of Object.entries(data.players)) {
+            this.players[i].playerTrainCards = v.trainCards;
+            this.players[i].playerTicketCards = v.tickets;
+            i++;
+        }
+        this.trains = data.board.trains;
+        this.tickets = data.board.tickets;
+        this.visibleCards = data.board.visibleCards;
     }
 }
-
-board = new Board()
-board.start("Me", "Player 2")

@@ -1,0 +1,284 @@
+@font-face {
+    font-family: 'VAG World Bold';
+    src: url('fonts/vag_world_bold.eot'); /* IE 9 Compatibility Mode */
+    src: url('fonts/vag_world_bold.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+    url('fonts/vag_world_bold.woff2') format('woff2'), /* Super Modern Browsers */
+    url('fonts/vag_world_bold.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+    url('fonts/vag_world_bold.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('fonts/vag_world_bold.svg#vag_world_bold') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+body{
+    padding: 0;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background-image: url("img/fon.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+.menu{
+    margin-top: 100%;
+    margin-left: 100%;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 300px;
+    height: 250px;
+    text-align: center;
+}
+.button {
+    font-family: 'VAG World Bold', Arial, sans-serif;
+    font-size: 18px;
+    display: inline-block;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: 0 -1px rgba(0,0,0,.5);
+    user-select: none;
+    padding: 5px;
+    border: 1px solid rgb(80,32,0);
+    border-radius: 5px;
+    outline: none;
+    background: rgb(147,80,36) linear-gradient(rgb(106,58,26), rgb(147,80,36) 80%);
+    box-shadow:
+            0 6px rgb(86,38,6),
+            0 3px 15px rgba(0,0,0,.4),
+            inset 0 1px rgba(255,255,255,.3),
+            inset 0 0 3px rgba(255,255,255,.5);
+    transition: .2s;
+}
+.button a{
+    text-decoration: none;
+    color: white;
+}
+.button:hover {
+    background: rgb(167,91,41) linear-gradient(rgb(126,69,31), rgb(167,91,41) 80%);
+}
+.button:active {
+    background: rgb(120,63,25) linear-gradient(rgb(120,63,25) 20%, rgb(167,91,41));
+    box-shadow:
+            0 2px rgb(86,38,6),
+            0 1px 6px rgba(0,0,0,.4),
+            inset 0 1px rgba(255,255,255,.3),
+            inset 0 0 3px rgba(255,255,255,.5);
+    -webkit-transform: translate(0, 4px);
+    transform: translate(0, 4px);
+}
+h3{
+    font-family: 'VAG World Bold', Arial, sans-serif;
+    font-size: 22px;
+    color: #d13f21;
+
+}
+.input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    margin: 5px 0;
+    opacity: 0.85;
+    display: inline-block;
+    font-size: 17px;
+    line-height: 20px;
+    text-decoration: none; /* remove underline from anchors */
+}
+.input:hover{
+    opacity: 1;
+}
+table {
+    width: 100%;
+    height: 100%;
+    margin-bottom: 10px;
+    border: 15px solid #F2F8F8;
+    border-top: 5px solid #F2F8F8;
+    border-collapse: collapse;
+    border-radius: 5px;
+}
+th {
+    font-weight: bold;
+    padding: 5px;
+    background: #F2F8F8;
+    border: none;
+    border-bottom: 5px solid #F2F8F8;
+}
+td {
+    font-size: 14px;
+    font-family: 'VAG World Bold', Arial, sans-serif;
+    background: white;
+    padding: 5px;
+    border: none;
+    border-bottom: 5px solid #F2F8F8;
+    cursor: pointer;
+}
+.list{
+    margin-top: 100%;
+    margin-left: 100%;
+    padding: 8px;
+    width: 300px;
+    height: 800px;
+    display: flex;
+    order: 1;
+    flex-direction: column;
+    /*justify-content: space-between;*/
+    text-align: center;
+}
+.list_table{
+    height: 600px;
+    margin-bottom: 10px;
+}
+.list_button{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.chosen {
+    background: forestgreen;
+}
+* {
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+}
+
+.cardNumber {
+    stroke: #000000;
+    stroke-width: 1px;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+    font-size: 48px;
+    fill: white;
+    user-select: none;
+    font-family: Calibri;
+}
+
+.rightPanel {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.btn {
+    font-family: Calibri;
+    font-size: 36px;
+    fill: white;
+    stroke: #000000;
+    stroke-width: 1px;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+}
+
+.otherPlayerName {
+    font-family: Calibri;
+    font-size: 28px;
+    fill: white;
+    stroke: #000000;
+    stroke-width: 1px;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+}
+
+.otherPlayerStat {
+    font-family: Calibri;
+    font-size: 15px;
+    fill: white;
+    stroke: #000000;
+    stroke-width: 0.2px;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
+}
+
+.filter {
+    filter: grayscale(100%);
+}
+
+.hide {
+    display: none;
+}
+
+.playerTicket {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+
+.map {
+    filter: drop-shadow(0px 0px 10px black);
+}
+
+.card:hover {
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(1.25);
+}
+
+.mapContainer {
+    position: absolute;
+    width: 945px;
+    left: 0;
+    right: 0;
+    top: 10px;
+    margin: auto;
+}
+
+.svg_ {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+}
+.railway {
+    opacity: 0.8;
+}
+.railway:hover {
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+#gameMain {
+    background-image: url("img/background.jpg");
+    width: 100%;
+}
+
+.railway {
+    opacity: 0.8;
+}
+path:hover {
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+    opacity: 0.2;
+}
+.selected{
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(1.25);
+}
+
+#players {
+    position: absolute;
+    text-align: center;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    top: 300px;
+    left: 400px;
+    font-family: 'VAG World Bold', Arial, sans-serif;
+    font-size: 32px;
+    color: #fff;
+}
+
+#play {
+    letter-spacing: 5px;
+}
