@@ -273,7 +273,7 @@ function drawPlayerInfo(board, meIndex) {
     btnText.setAttributeNS(null, 'y', rect.height-cardWidth+10);
     me.appendChild(btnText);
 
-    textNode = document.createTextNode(`Поезда: ${board.players[meIndex].trains}`);
+    textNode = document.createTextNode(`Вагончики: ${board.players[meIndex].trains}`);
     btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
     btnText.appendChild(textNode);
     btnText.classList.add("otherPlayerStat");
@@ -539,7 +539,7 @@ function drawOtherPlayers(board, meIndex) {
             btnText.setAttributeNS(null, 'y', 35 + 110*otherPlayerIndex);
             otherPlayer.appendChild(btnText);
 
-            textNode = document.createTextNode(`Поезда: ${board.players[i].trains}`);
+            textNode = document.createTextNode(`Вагончики: ${board.players[i].trains}`);
             btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
             btnText.appendChild(textNode);
             btnText.classList.add("otherPlayerStat");
@@ -548,7 +548,7 @@ function drawOtherPlayers(board, meIndex) {
             btnText.setAttributeNS(null, 'y', 65 + 110*otherPlayerIndex);
             otherPlayer.appendChild(btnText);
 
-            textNode = document.createTextNode(`Карт поездов: ${board.players[i].playerTrainCards.length}`);
+            textNode = document.createTextNode(`Карт вагончиков: ${board.players[i].playerTrainCards.length}`);
             btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
             btnText.appendChild(textNode);
             btnText.classList.add("otherPlayerStat");
@@ -604,9 +604,9 @@ function redrawCurrentPlayer(board, currentPlayer) {
             let otherPlayerTickets = otherPlayers[i].getElementsByClassName("otherPlayerTickets")[0];
             let otherPlayerTrains = otherPlayers[i].getElementsByClassName("otherPlayerTrains")[0];
             let otherPlayerPts = otherPlayers[i].getElementsByClassName("otherPlayerPts")[0];
-            otherPlayerCards.textContent = `Карт поездов: ${board.players[currentPlayer].playerTrainCards.length}`;
+            otherPlayerCards.textContent = `Карт вагончиков: ${board.players[currentPlayer].playerTrainCards.length}`;
             otherPlayerTickets.textContent = `Карт маршрутов: ${board.players[currentPlayer].playerTicketCards.length}`;
-            otherPlayerTrains.textContent = `Поезда: ${board.players[currentPlayer].trains}`;
+            otherPlayerTrains.textContent = `Вагончики: ${board.players[currentPlayer].trains}`;
             otherPlayerPts.textContent = `Очки: ${board.players[currentPlayer].playerPts}`;
         }
     }
@@ -764,7 +764,7 @@ function redrawPlayerInfo(board, meIndex) {
     let playerPts = document.getElementsByClassName("mePts")[0];
     let playerTrains = document.getElementsByClassName("meTrains")[0];
 
-    playerTrains.textContent = `Поезда: ${board.players[meIndex].trains}`;
+    playerTrains.textContent = `Вагончики: ${board.players[meIndex].trains}`;
     playerPts.textContent = `Очки: ${board.players[meIndex].playerPts}`;
 }
 

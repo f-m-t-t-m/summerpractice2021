@@ -30,7 +30,7 @@ function createRoom() {
                 name: hostName,
                 trainCards: board.players[0].playerTrainCards,
                 tickets: board.players[0].playerTicketCards,
-                trains: 10,
+                trains: 40,
                 pts: 0,
             },
         },
@@ -122,7 +122,7 @@ function joinRoom() {
                 name: newUser,
                 trainCards: newUserCards,
                 tickets: newUserTickets,
-                trains: 10,
+                trains: 40,
                 pts: 0,
             });
         });
