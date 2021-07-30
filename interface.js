@@ -235,11 +235,63 @@ function drawPlayerTickets(board, meIndex) {
         image.setAttribute("height", cardHeight);
         image.setAttribute("x", cardHeight-10);
         image.setAttribute("index", i);
-        image.setAttribute("y", rect.height-cardWidth-45-i*20);
+        image.setAttribute("y", rect.height-cardWidth-45-i*20-100);
         image.setAttribute("transform", "rotate(90), scale(1.25)");
         image.classList.add("playerTicket");
         game.appendChild(image);
     }
+}
+
+function drawPlayerInfo(board, meIndex) {
+    let game = document.getElementById("game");
+    let rect = game.getBoundingClientRect();
+
+    let trains = board.players[meIndex].trains;
+    let pts = board.players[meIndex].playerPts;
+
+    const cardWidth = 90;
+    const cardHeight = 90*474/292;
+
+    let me = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    let btn = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+
+    btn.setAttributeNS(null, 'x', cardHeight-40);
+    btn.setAttributeNS(null, 'y', rect.height-cardWidth-10);
+    btn.setAttributeNS(null, 'width', 150);
+    btn.setAttributeNS(null, 'height', 90);
+    btn.setAttributeNS(null, 'rx', 5);
+    btn.setAttributeNS(null, 'ty', 5);
+    btn.setAttributeNS(null, 'fill', board.colors[meIndex]);
+    me.appendChild(btn);
+    me.classList.add("me");
+
+    let textNode = document.createTextNode(board.players[meIndex].playerName);
+    let btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    btnText.appendChild(textNode);
+    btnText.classList.add("meName");
+    btnText.setAttributeNS(null, 'x', cardHeight-30);
+    btnText.setAttributeNS(null, 'y', rect.height-cardWidth+10);
+    me.appendChild(btnText);
+
+    textNode = document.createTextNode(`Поезда: ${board.players[meIndex].trains}`);
+    btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    btnText.appendChild(textNode);
+    btnText.classList.add("otherPlayerStat");
+    btnText.classList.add("meTrains");
+    btnText.setAttributeNS(null, 'x', cardHeight-30);
+    btnText.setAttributeNS(null, 'y', rect.height-cardWidth+25);
+    me.appendChild(btnText);
+
+    textNode = document.createTextNode(`Очки: ${board.players[meIndex].playerPts}`);
+    btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    btnText.appendChild(textNode);
+    btnText.classList.add("otherPlayerStat");
+    btnText.classList.add("mePts");
+    btnText.setAttributeNS(null, 'x', cardHeight-30);
+    btnText.setAttributeNS(null, 'y', rect.height-cardWidth+40);
+    me.appendChild(btnText);
+
+    game.appendChild(me);
 }
 
 function takeTrainCards(board, target, meIndex) {
@@ -247,10 +299,10 @@ function takeTrainCards(board, target, meIndex) {
     let rect = game.getBoundingClientRect();
 
     const cardWidth = 90;
-    const cardHeight = 90*474/292;
+    const cardHeight = 90 * 474 / 292;
 
-    const mapWidth = rect.width/1.6;
-    const mapHeight = mapWidth*2301/3578;
+    const mapWidth = rect.width / 1.6;
+    const mapHeight = mapWidth * 2301 / 3578;
     let deck = document.getElementsByClassName("takeCardsDeck");
     let visibleCards = document.getElementsByClassName("visibleCards")
     let playerCards = document.getElementsByClassName("card");
@@ -287,13 +339,19 @@ function takeVisibleCards(board, target, meIndex) {
     let x = target.getAttribute("x");
     let y = target.getAttribute("y");
     let newCard = document.createElementNS("http://www.w3.org/2000/svg", "image");
-    let newTrainCard = board.trains.cards.shift();
-    let newCardColor = newTrainCard.color;
-    let index = target.getAttribute("index");
-    let xDeck = deck[deck.length-1].getAttribute("x");
-    let yDeck = deck[deck.length-1].getAttribute("y");
+    let newCardColor = "none";
+
+    let index;
+    let topDeckAnimation;
+    let topDeckAnimationRotate;
+    let newTrainCard;
+    newTrainCard = board.trains.cards.shift();
+    newCardColor = newTrainCard.color;
+    index = target.getAttribute("index");
+    let xDeck = deck[deck.length - 1].getAttribute("x");
+    let yDeck = deck[deck.length - 1].getAttribute("y");
     let yDeck0 = deck[0].getAttribute("y");
-    let diff = yDeck-yDeck0;
+    let diff = yDeck - yDeck0;
 
     newCard.setAttributeNS(null, "href", `img/wagons/${newCardColor}.png`);
     newCard.setAttribute("width", cardWidth)
@@ -304,20 +362,20 @@ function takeVisibleCards(board, target, meIndex) {
     newCard.setAttribute("color", newCardColor);
     newCard.setAttribute("transform", "rotate(-90)")
     newCard.setAttribute("index", index);
-    addAnimation(newCard, -rect.width/2 + cardWidth + 90, cardHeight, 0, -index*cardWidth - cardWidth-20);
+    addAnimation(newCard, -rect.width / 2 + cardWidth + 90, cardHeight, 0, -index * cardWidth - cardWidth - 20);
 
-    let topDeckAnimation = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
+    topDeckAnimation = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
     topDeckAnimation.setAttribute("attributeName", "transform");
     topDeckAnimation.setAttribute("type", "translate");
     topDeckAnimation.setAttribute("dur", "0.5s");
     topDeckAnimation.setAttribute("begin", "indefinite");
     topDeckAnimation.setAttribute("repeatCount", "1");
     topDeckAnimation.setAttribute("from", `0, 0`);
-    topDeckAnimation.setAttribute("to", `${x-xDeck}, ${-index*cardWidth - cardWidth-20-diff}`);
+    topDeckAnimation.setAttribute("to", `${x - xDeck}, ${-index * cardWidth - cardWidth - 20 - diff}`);
     topDeckAnimation.setAttribute("class", `deckAnimation`);
     topDeckAnimation.setAttribute("fill", `freeze`);
 
-    let topDeckAnimationRotate = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
+    topDeckAnimationRotate = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
     topDeckAnimationRotate.setAttribute("attributeName", "transform");
     topDeckAnimationRotate.setAttribute("type", "rotate");
     topDeckAnimationRotate.setAttribute("dur", "1s");
@@ -335,9 +393,6 @@ function takeVisibleCards(board, target, meIndex) {
     g.appendChild(newCard)
 
 
-    // if (takenCardsNum == 0 && trainColor == "locomotive") {
-    //     locomotiveFlag = 1;
-    // }
     let train = new trainCard(trainColor);
     board.players[meIndex].playerTrainCards.push(train);
     let moveAnimation = target.getElementsByClassName("deckAnimation");
@@ -346,16 +401,18 @@ function takeVisibleCards(board, target, meIndex) {
     moveAnimation[0].beginElement();
     rotAnimation[0].beginElement();
     scaleAnimation[0].beginElement();
-    setTimeout(function() {
+    setTimeout(function () {
         topDeckAnimation.beginElement();
         topDeckAnimationRotate.beginElement();
     }, 50)
     setTimeout(function() {
-        target.parentNode.removeChild(target)
-        }, 1000) ;
+    target.parentNode.removeChild(target)
+    }, 1000) ;
     board.visibleCards[index] = newTrainCard;
-    takenCardsNum++;
     deck[deck.length-1].remove();
+
+    takenCardsNum++;
+
     redrawPlayerCards(board.players[meIndex]);
     return newCardColor;
 }
@@ -482,7 +539,7 @@ function drawOtherPlayers(board, meIndex) {
             btnText.setAttributeNS(null, 'y', 35 + 110*otherPlayerIndex);
             otherPlayer.appendChild(btnText);
 
-            textNode = document.createTextNode(`Поездов: ${board.players[i].trains}`);
+            textNode = document.createTextNode(`Поезда: ${board.players[i].trains}`);
             btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
             btnText.appendChild(textNode);
             btnText.classList.add("otherPlayerStat");
@@ -509,6 +566,27 @@ function drawOtherPlayers(board, meIndex) {
             btnText.setAttributeNS(null, 'y', 85 + 110*otherPlayerIndex);
             otherPlayer.appendChild(btnText);
 
+            textNode = document.createTextNode(`Очки: ${board.players[i].playerPts}`);
+            btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            btnText.appendChild(textNode);
+            btnText.classList.add("otherPlayerStat");
+            btnText.classList.add("otherPlayerPts");
+            btnText.setAttributeNS(null, 'x', 80);
+            btnText.setAttributeNS(null, 'y', 95 + 110*otherPlayerIndex);
+            otherPlayer.appendChild(btnText);
+
+            textNode = document.createTextNode("");
+            btnText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            btnText.appendChild(textNode);
+            btnText.classList.add("otherPlayerStat");
+            btnText.classList.add("otherPlayerMove");
+            btnText.setAttributeNS(null, 'x', 80);
+            btnText.setAttributeNS(null, 'y', 55 + 110*otherPlayerIndex);
+            otherPlayer.appendChild(btnText);
+            if(i == 0) {
+                btnText .innerHTML = "Ходит";
+            }
+
             otherPlayer.setAttribute("index", i);
             otherPlayer.classList.add("otherPlayer");
             game.appendChild(otherPlayer);
@@ -524,8 +602,12 @@ function redrawCurrentPlayer(board, currentPlayer) {
         if (otherPlayers[i].getAttribute("index") == currentPlayer) {
             let otherPlayerCards = otherPlayers[i].getElementsByClassName("otherPlayerCards")[0];
             let otherPlayerTickets = otherPlayers[i].getElementsByClassName("otherPlayerTickets")[0];
+            let otherPlayerTrains = otherPlayers[i].getElementsByClassName("otherPlayerTrains")[0];
+            let otherPlayerPts = otherPlayers[i].getElementsByClassName("otherPlayerPts")[0];
             otherPlayerCards.textContent = `Карт поездов: ${board.players[currentPlayer].playerTrainCards.length}`;
             otherPlayerTickets.textContent = `Карт маршрутов: ${board.players[currentPlayer].playerTicketCards.length}`;
+            otherPlayerTrains.textContent = `Поезда: ${board.players[currentPlayer].trains}`;
+            otherPlayerPts.textContent = `Очки: ${board.players[currentPlayer].playerPts}`;
         }
     }
 }
@@ -543,7 +625,6 @@ function removeTopCardDeck(currentPlayer) {
             index = i;
         }
     }
-
     let card = document.getElementsByClassName("takeCardsDeck");
     card = card[card.length-1];
     let animation = card.getElementsByClassName("deckAnimation");
@@ -553,6 +634,7 @@ function removeTopCardDeck(currentPlayer) {
     animation[0].beginElement();
     rotAnimation[0].beginElement();
     scaleAnimation[0].beginElement();
+    card.classList.remove("takeCardsDeck");
 }
 
 function removeVisibleCard(currentPlayer, index, newCardColor) {
@@ -598,11 +680,15 @@ function removeVisibleCard(currentPlayer, index, newCardColor) {
     }, 1000) ;
 
     let deck = document.getElementsByClassName("takeCardsDeck");
-    let newCard = document.createElementNS("http://www.w3.org/2000/svg", "image");
-    let xDeck = deck[deck.length-1].getAttribute("x");
-    let yDeck = deck[deck.length-1].getAttribute("y");
+
+    let topDeckAnimation;
+    let topDeckAnimationRotate;
+    let newCard;
+    newCard = document.createElementNS("http://www.w3.org/2000/svg", "image");
+    let xDeck = deck[deck.length - 1].getAttribute("x");
+    let yDeck = deck[deck.length - 1].getAttribute("y");
     let yDeck0 = deck[0].getAttribute("y");
-    let diff = yDeck-yDeck0;
+    let diff = yDeck - yDeck0;
 
     newCard.setAttributeNS(null, "href", `img/wagons/${newCardColor}.png`);
     newCard.setAttribute("width", cardWidth)
@@ -613,20 +699,20 @@ function removeVisibleCard(currentPlayer, index, newCardColor) {
     newCard.setAttribute("color", newCardColor);
     newCard.setAttribute("transform", "rotate(-90)")
     newCard.setAttribute("index", index);
-    addAnimation(newCard, -rect.width/2 + cardWidth + 90, cardHeight, 0, -index*cardWidth - cardWidth-20);
+    addAnimation(newCard, -rect.width / 2 + cardWidth + 90, cardHeight, 0, -index * cardWidth - cardWidth - 20);
 
-    let topDeckAnimation = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
+    topDeckAnimation = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
     topDeckAnimation.setAttribute("attributeName", "transform");
     topDeckAnimation.setAttribute("type", "translate");
     topDeckAnimation.setAttribute("dur", "0.5s");
     topDeckAnimation.setAttribute("begin", "indefinite");
     topDeckAnimation.setAttribute("repeatCount", "1");
     topDeckAnimation.setAttribute("from", `0, 0`);
-    topDeckAnimation.setAttribute("to", `${x-xDeck}, ${-index*cardWidth - cardWidth-20-diff}`);
+    topDeckAnimation.setAttribute("to", `${x - xDeck}, ${-index * cardWidth - cardWidth - 20 - diff}`);
     topDeckAnimation.setAttribute("class", `deckAnimation`);
     topDeckAnimation.setAttribute("fill", `freeze`);
 
-    let topDeckAnimationRotate = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
+    topDeckAnimationRotate = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");
     topDeckAnimationRotate.setAttribute("attributeName", "transform");
     topDeckAnimationRotate.setAttribute("type", "rotate");
     topDeckAnimationRotate.setAttribute("dur", "1s");
@@ -645,7 +731,7 @@ function removeVisibleCard(currentPlayer, index, newCardColor) {
 
     topDeckAnimation.beginElement();
     topDeckAnimationRotate.beginElement();
-    deck[deck.length-1].remove();
+    deck[deck.length - 1].remove();
 }
 
 function removeTicketCards(chosenNum) {
@@ -674,11 +760,58 @@ function fillPath(pathId, unavailablePathsId) {
     }
 }
 
+function redrawPlayerInfo(board, meIndex) {
+    let playerPts = document.getElementsByClassName("mePts")[0];
+    let playerTrains = document.getElementsByClassName("meTrains")[0];
+
+    playerTrains.textContent = `Поезда: ${board.players[meIndex].trains}`;
+    playerPts.textContent = `Очки: ${board.players[meIndex].playerPts}`;
+}
+
+function removeTicket(ticketIndex) {
+    let tickets = board.players[data.currentPlayer].playerTicketCards;
+    tickets.splice(ticketIndex, 1);
+    let tick = document.getElementsByClassName("playerTicket");
+    for(let i = tick.length-1; i >= 0; i--) {
+        tick[i].parentNode.removeChild(tick[i]);
+    }
+    drawPlayerTickets(board, data.currentPlayer);
+
+}
+
+function drawCurrentPlayer(board, currentPlayer) {
+    let otherPlayers = document.getElementsByClassName("otherPlayer");
+    for(let i = 0; i < otherPlayers.length; i++) {
+        let otherPlayerMove = otherPlayers[i].getElementsByClassName("otherPlayerMove")[0];
+        console.log(otherPlayerMove);
+        if (otherPlayers[i].getAttribute("index") == currentPlayer) {
+            otherPlayerMove.textContent = "Ходит";
+        }
+        else {
+            otherPlayerMove.innerHTML = "";
+        }
+    }
+}
+
 play = document.getElementById("play");
 play.addEventListener("click", function(){
     firebase.database().ref('rooms/' + room).update({
         gameStarted: 1,
     });
+});
+
+document.addEventListener("click", function (e) {
+    if (e.target && e.target.classList.contains("playerTicket")) {
+        let index = e.target.getAttribute("index");
+        let tmp = board.players[meIndex].playerTicketCards[index];
+        board.players[meIndex].playerTicketCards[index] = board.players[0].playerTicketCards[0]
+        board.players[meIndex].playerTicketCards[0] = tmp;
+        let tick = document.getElementsByClassName("playerTicket");
+        for(let i = tick.length-1; i >= 0; i--) {
+            tick[i].parentNode.removeChild(tick[i]);
+        }
+        drawPlayerTickets(board, meIndex);
+    }
 });
 
 function playGame() {

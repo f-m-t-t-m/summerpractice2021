@@ -221,13 +221,10 @@ class Player {
         this.playerName = name;
         this.playerTrainCards = [];
         this.playerTicketCards = [];
-        this.trains = 45;
+        this.trains = 40;
         this.playerPts = 0;
         this.color = "pink";
-    }
-
-    mulligan() {
-
+        this.lastTurn = 0;
     }
 }
 
@@ -1198,6 +1195,220 @@ class Board {
         this.trains = [];
         this.currentPlayer = 0;
         this.colors = ["green", "orange", "red", "blue"];
+        this.cities = [
+            {
+                id: 0,
+                name: "Kagoshima",
+            },
+            {
+                id: 1,
+                name: "Miyazaki",
+            },
+            {
+                id: 2,
+                name: "Nagasaki",
+            },
+            {
+                id: 3,
+                name: "Fukuoka",
+            },
+            {
+                id: 4,
+                name: "Oita",
+            },
+            {
+                id: 5,
+                name: "Kochi",
+            },
+            {
+                id: 6,
+                name: "Matsuyama",
+            },
+            {
+                id: 7,
+                name: "Yamaguchi",
+            },
+            {
+                id: 8,
+                name: "Taipei",
+            },
+            {
+                id: 9,
+                name: "Shanghai",
+            },
+            {
+                id: 10,
+                name: "Dalian",
+            },
+            {
+                id: 11,
+                name: "Qingdao",
+            },
+            {
+                id: 12,
+                name: "Matsue",
+            },
+            {
+                id: 13,
+                name: "Hiroshima",
+            },
+            {
+                id: 14,
+                name: "Okayama",
+            },
+            {
+                id: 15,
+                name: "Takamatsu",
+            },
+            {
+                id: 16,
+                name: "Wakayama",
+            },
+            {
+                id: 17,
+                name: "Osaka",
+            },
+            {
+                id: 18,
+                name: "Kyoto",
+            },
+            {
+                id: 19,
+                name: "Miyazu",
+            },
+            {
+                id: 20,
+                name: "Seoul",
+            },
+            {
+                id: 21,
+                name: "Shima",
+            },
+            {
+                id: 22,
+                name: "Nagoya",
+            },
+            {
+                id: 23,
+                name: "Fukui",
+            },
+            {
+                id: 24,
+                name: "Busan",
+            },
+            {
+                id: 25,
+                name: "Pyongyang",
+            },
+            {
+                id: 26,
+                name: "Fuji",
+            },
+            {
+                id: 27,
+                name: "Tokyo",
+            },
+            {
+                id: 28,
+                name: "Takasaki",
+            },
+            {
+                id: 29,
+                name: "Nagano",
+            },
+            {
+                id: 30,
+                name: "Suzu",
+            },
+            {
+                id: 31,
+                name: "Mito",
+            },
+            {
+                id: 32,
+                name: "Oyama",
+            },
+            {
+                id: 33,
+                name: "Koriyama",
+            },
+            {
+                id: 34,
+                name: "Niigata",
+            },
+            {
+                id: 35,
+                name: "Chongjin",
+            },
+            {
+                id: 36,
+                name: "Fukushima",
+            },
+            {
+                id: 37,
+                name: "Sendai",
+            },
+            {
+                id: 38,
+                name: "Yamagata",
+            },
+            {
+                id: 39,
+                name: "Vladivostok",
+            },
+            {
+                id: 40,
+                name: "Khabarovsk",
+            },
+            {
+                id: 41,
+                name: "Korsakov",
+            },
+            {
+                id: 42,
+                name: "Morioka",
+            },
+            {
+                id: 43,
+                name: "Akita",
+            },
+            {
+                id: 45,
+                name: "Hachinohe",
+            },
+            {
+                id: 46,
+                name: "Aomori",
+            },
+            {
+                id: 47,
+                name: "Hakodate",
+            },
+            {
+                id: 48,
+                name: "Sapporo",
+            },
+            {
+                id: 49,
+                name: "Obihiro",
+            },
+            {
+                id: 50,
+                name: "Asahikawa",
+            },
+            {
+                id: 51,
+                name: "Abashiri",
+            },
+            {
+                id: 52,
+                name: "Wakkanai",
+            },
+            {
+                id: 53,
+                name: "Kaohsiung",
+            },
+        ];
     }
 
     start(players) {
@@ -1221,10 +1432,66 @@ class Board {
         for(let [k, v] of Object.entries(data.players)) {
             this.players[i].playerTrainCards = v.trainCards;
             this.players[i].playerTicketCards = v.tickets;
+            this.players[i].playerPts = v.pts;
+            this.players[i].trains = v.trains;
             i++;
         }
         this.trains = data.board.trains;
         this.tickets = data.board.tickets;
         this.visibleCards = data.board.visibleCards;
+    }
+
+    checkTickets(player) {
+        let tickets = player.playerTicketCards;
+        let edgesToCheck = new Array();
+        for(let i = 0; i < tickets.length; i++) {
+            let edge = new Array();
+            edge.push(this.cities.filter(city => city.name == tickets[i].cities[0])[0].id);
+            edge.push(this.cities.filter(city => city.name == tickets[i].cities[1])[0].id);
+            edgesToCheck.push(edge);
+        }
+        let playerRailways = this.railways.filter(railway => railway.player == board.players.indexOf(player));
+
+        let edges = new  Array();
+        for(let i = 0; i < playerRailways.length; i++) {
+            let edge = new Array();
+            edge.push(this.cities.filter(city => city.name == playerRailways[i].cities[0])[0].id);
+            edge.push(this.cities.filter(city => city.name == playerRailways[i].cities[1])[0].id);
+            edges.push(edge);
+        }
+
+        let mat = Array(54).fill().map(() => Array(54).fill(0));
+
+        for(let i = 0; i < edges.length; i++) {
+            mat[edges[i][0]][edges[i][1]] = 1;
+            mat[edges[i][1]][edges[i][0]] = 1;
+        }
+
+        let used = Array(54).fill(0);
+
+        let color = 1;
+        for(let i = 0; i < 54; i++) {
+            if (!used[i]) {
+                dfs(mat, used, i, color);
+                color++;
+            }
+        }
+
+        let finishedTickets = new Array();
+        for(let i = 0; i < edgesToCheck.length; i++) {
+            if (used[edgesToCheck[i][0]] == used[edgesToCheck[i][1]]) {
+                finishedTickets.push(i);
+            }
+        }
+        return finishedTickets;
+    }
+}
+
+function dfs(mat, used, u, color) {
+    used[u] = color;
+    for (let i = 0; i < 54; i++) {
+        if (mat[u][i] == 1 && used[i] == 0) {
+            dfs(mat, used, i, color);
+        }
     }
 }

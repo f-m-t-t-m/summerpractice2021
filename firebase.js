@@ -30,7 +30,8 @@ function createRoom() {
                 name: hostName,
                 trainCards: board.players[0].playerTrainCards,
                 tickets: board.players[0].playerTicketCards,
-                trains: 45,
+                trains: 10,
+                pts: 0,
             },
         },
         board: {
@@ -121,7 +122,8 @@ function joinRoom() {
                 name: newUser,
                 trainCards: newUserCards,
                 tickets: newUserTickets,
-                trains: 45,
+                trains: 10,
+                pts: 0,
             });
         });
     }
@@ -130,9 +132,9 @@ function joinRoom() {
 let data;
 let board;
 let name;
+let meIndex = 0;
 function startGame() {
     let startFlag = 0;
-    let meIndex = 0;
     let moveType = "";
     let moveEndFlag = 0;
     let takenCards = 0;
@@ -150,6 +152,11 @@ function startGame() {
     let railwaysWithLocomotiveId = [];
     let colorWagon, countWagon;
     let countCardsSameColor;
+    let railwayCost = 0;
+    let lengthPath = 0;
+    let len = 0;
+    let lastTurnFlag = 0;
+    let endGame = 0;
 
     let body = document.getElementsByTagName("body");
     body[0].addEventListener("click", function clicked(e) {
@@ -187,8 +194,8 @@ function startGame() {
                                 firebase.database().ref('rooms/'+room+'/players/'+board.players[data.currentPlayer].id).update({
                                     trainCards: board.players[data.currentPlayer].playerTrainCards,
                                 }, () => {
-                                    firebase.database().ref("rooms/"+room+'/board'+'/trains').update({
-                                        cards: board.trains.cards,
+                                    firebase.database().ref("rooms/"+room+'/board').update({
+                                        trains: board.trains,
                                     }, () => {
                                         firebase.database().ref('rooms/'+room).update({
                                             fullUpdate: 1,
@@ -209,23 +216,27 @@ function startGame() {
                 if (takenCards == 2) {
                     moveEndFlag = 1;
                 }
+                takeTrainCards(board, e.target, meIndex);
                 firebase.database().ref('rooms/'+room).update({
                     fullUpdate: 0,
-                });
-                takeTrainCards(board, e.target, meIndex);
-                let newMove = firebase.database().ref('rooms/' + room + '/players/' + board.players[data.currentPlayer].id +
-                    '/move');
-                newMove.set({
-                    moveType: "takeDeckCard",
-                });
-                firebase.database().ref('rooms/'+room+'/board/trains/').update({
-                    cards: data.board.trains.cards,
-                });
-                firebase.database().ref('rooms/'+room+'/players/'+board.players[data.currentPlayer].id).update({
-                    trainCards: board.players[data.currentPlayer].playerTrainCards,
-                });
-                firebase.database().ref('rooms/'+room).update({
-                    fullUpdate: 1,
+                }, () => {
+                    let newMove = firebase.database().ref('rooms/' + room + '/players/' + board.players[data.currentPlayer].id +
+                        '/move');
+                    newMove.set({
+                        moveType: "takeDeckCard",
+                    }, () => {
+                        firebase.database().ref('rooms/'+room+'/board').update({
+                            trains: board.trains,
+                        }, () => {
+                            firebase.database().ref('rooms/'+room+'/players/'+board.players[data.currentPlayer].id).update({
+                                trainCards: board.players[data.currentPlayer].playerTrainCards,
+                            }, () => {
+                                firebase.database().ref('rooms/'+room).update({
+                                    fullUpdate: 1,
+                                });
+                            });
+                        });
+                    });
                 });
             }
         }
@@ -321,7 +332,7 @@ function startGame() {
                 });
             }
         }
-        if (e.target && e.target.parentNode.classList.contains("card")) {
+        if (e.target && e.target.parentNode && e.target.parentNode.classList.contains("card")) {
             if (moveType == "") {
                 checkLocomotive = false;
                 cards = document.getElementsByClassName("card");
@@ -404,7 +415,9 @@ function startGame() {
             moveType = "fillPath";
             let playerTrainCard = board.players[data.currentPlayer].playerTrainCards;
             if (checkLocomotive) {
-                let lengthPath = allRailways[Number(e.target.getAttribute("id")) - 1]["length"];
+                lengthPath = allRailways[Number(e.target.getAttribute("id")) - 1]["length"];
+                len = lengthPath;
+                railwayCost = allRailways[Number(e.target.getAttribute("id")) - 1]["cost"];
                 if (railwaysWithLocomotiveId.includes(Number(e.target.getAttribute("id")))) {
                     for (let k = playerTrainCard.length - 1; k >= 0; k--) {
                         if (playerTrainCard[k]["color"] === "locomotive") {
@@ -473,7 +486,9 @@ function startGame() {
                 }
             }
             else {
-                let lengthPath = allRailways[Number(e.target.getAttribute("id")) - 1]["length"];
+                lengthPath = allRailways[Number(e.target.getAttribute("id")) - 1]["length"];
+                len = lengthPath;
+                railwayCost = allRailways[Number(e.target.getAttribute("id")) - 1]["length"];
                 for (let k = playerTrainCard.length-1; k >= 0; k--) {
                     if (playerTrainCard[k]["color"] === colorWagon && lengthPath !== 0) {
                         playerTrainCard.splice(k, 1);
@@ -493,6 +508,18 @@ function startGame() {
                     }
                 }
             }
+
+            let finishedTickets = board.checkTickets(board.players[data.currentPlayer]);
+            for(let i = 0; i < finishedTickets.length; i++) {
+                board.players[data.currentPlayer].playerPts += board.players[data.currentPlayer].playerTicketCards[i].cost;
+                removeTicket(finishedTickets[i]);
+            }
+            board.players[data.currentPlayer].playerPts += railwayCost;
+            board.players[data.currentPlayer].trains -= len;
+            if (board.players[data.currentPlayer].trains <= 2) {
+                lastTurnFlag = 1;
+            }
+            redrawPlayerInfo(board, meIndex);
             moveEndFlag = 1;
             redrawPlayerCards(board.players[data.currentPlayer]);
             firebase.database().ref('rooms/'+room).update({
@@ -509,6 +536,9 @@ function startGame() {
                     }, () => {
                         firebase.database().ref('rooms/'+room+'/players/'+board.players[data.currentPlayer].id).update({
                             trainCards: board.players[data.currentPlayer].playerTrainCards,
+                            pts: board.players[data.currentPlayer].playerPts,
+                            trains: board.players[data.currentPlayer].trains,
+                            tickets: board.players[data.currentPlayer].playerTicketCards,
                         }, () => {
                             firebase.database().ref('rooms/'+room).update({
                                 fullUpdate: 1,
@@ -516,20 +546,50 @@ function startGame() {
                         });
                     })
                 });
-
             });
         }
     });
 
     firebase.database().ref('rooms/' + room).on('value', function(snapshot){
         data = snapshot.val();
-        if (meIndex == data.currentPlayer && moveEndFlag == 0 && !moveContinue) {
+        if (meIndex == data.currentPlayer && !endGame) {
             body[0].style.pointerEvents = "unset";
         }
         if (meIndex != data.currentPlayer) {
             body[0].style.pointerEvents = "none";
         }
+        drawCurrentPlayer(board, data.currentPlayer);
         if (data.fullUpdate) {
+            if (lastTurnFlag) {
+                endGame = 1;
+                let max = 0;
+                for (let i = 0; i < board.players.length; i++) {
+                    for(let j = 0; j < board.players[i].playerTicketCards.length; j++) {
+                        board.players[i].playerPts -= board.players[i].playerTicketCards[j].cost;
+                    }
+
+                        if(i == meIndex) {
+                            redrawPlayerInfo(board, i);
+                        }
+                        else {
+                            redrawCurrentPlayer(board, i);
+                        }
+                    }
+                for (let i = 0; i < board.players.length; i++) {
+                    if (board.players[i].playerPts > max) {
+                        max = i;
+                    }
+                    if (!board.players[i].lastTurn) {
+                        endGame = 0;
+                    }
+                }
+                if (endGame) {
+                    alert("GAME ENDED!"+"\nWINNER IS " + board.colors[max]);
+                }
+            }
+            if (lastTurnFlag && !board.players[data.currentPlayer].lastTurn) {
+                board.players[data.currentPlayer].lastTurn = 1;
+            }
             if (data.gameStarted == 1 && !startFlag) {
                 startFlag = 1;
                 board = new Board();
@@ -544,6 +604,8 @@ function startGame() {
                     let player = new Player(v.name);
                     player.playerTrainCards = v.trainCards;
                     player.playerTicketCards = v.tickets;
+                    player.playerPts = v.pts;
+                    player.trains = v.trains;
                     player.id = k;
                     board.players.push(player);
                 }
@@ -558,6 +620,7 @@ function startGame() {
                 drawPlayerHand(board.players[meIndex]);
                 drawRightDecks(board);
                 drawPlayerTickets(board, meIndex);
+                drawPlayerInfo(board, meIndex);
                 let path = document.getElementsByTagName("path");
                 for(let i = 0; i < path.length; i++) {
                     path[i].classList.add("hide");
@@ -592,6 +655,7 @@ function startGame() {
                 moveEndFlag = 0;
                 takenCards = 0;
                 moveContinue = 0;
+                railwayCost = 0;
 
                 let currentPlayer = data.currentPlayer;
                 if (currentPlayer == data.playersNum-1) {
@@ -611,40 +675,6 @@ function startGame() {
             }
         }
     });
-}
-
-function playGame() {
-    let menu = document.getElementsByClassName("menu");
-    menu[0].classList.add("hide");
-    menu[1].classList.remove("hide");
-}
-
-function openMenuCreateRoom() {
-    let menu = document.getElementsByClassName("menu");
-    menu[1].classList.add("hide");
-    menu[2].classList.remove("hide");
-}
-
-function openListPlayers(){
-    let menu = document.getElementsByClassName("menu");
-    menu[1].classList.add("hide");
-    document.getElementsByClassName("list")[0].classList.remove("hide");
-}
-
-function toBack() {
-    let menu = document.getElementsByClassName("menu");
-    if (!menu[1].classList.contains("hide")) {
-        menu[1].classList.add("hide");
-        menu[0].classList.remove("hide");
-    }
-    if (!menu[2].classList.contains("hide")) {
-        menu[2].classList.add("hide");
-        menu[1].classList.remove("hide");
-    }
-    if (!document.getElementsByClassName("list")[0].classList.contains("hide")) {
-        document.getElementsByClassName("list")[0].classList.add("hide");
-        menu[1].classList.remove("hide");
-    }
 }
 
 getRooms();

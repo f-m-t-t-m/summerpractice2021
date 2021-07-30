@@ -179,7 +179,7 @@ body {
     stroke-linejoin: miter;
 }
 
-.otherPlayerName {
+.otherPlayerName, .meName {
     font-family: Calibri;
     font-size: 28px;
     fill: white;
